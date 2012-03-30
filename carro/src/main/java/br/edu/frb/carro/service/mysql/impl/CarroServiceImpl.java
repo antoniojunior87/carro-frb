@@ -1,8 +1,8 @@
 package br.edu.frb.carro.service.mysql.impl;
 
 import br.edu.frb.carro.entity.Carro;
-import br.edu.frb.carro.service.mysql.CarroService;
-import br.edu.frb.carro.repository.mysql.GenericRepository;
+import br.edu.frb.carro.service.CarroService;
+import br.edu.frb.carro.repository.mysql.MySqlRepository;
 import br.edu.frb.carro.util.Util;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author joelamalio
  */
-public class CarroServiceImpl extends GenericRepository implements CarroService {
+public class CarroServiceImpl extends MySqlRepository implements CarroService {
 
     private final Logger LOG = LoggerFactory.getLogger(CarroServiceImpl.class);
 

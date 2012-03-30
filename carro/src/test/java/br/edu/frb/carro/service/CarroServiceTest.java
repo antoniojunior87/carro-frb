@@ -1,6 +1,5 @@
 package br.edu.frb.carro.service;
 
-import br.edu.frb.carro.service.mysql.CarroService;
 import br.edu.frb.carro.service.mysql.impl.CarroServiceImpl;
 import br.edu.frb.carro.entity.Carro;
 import java.util.List;

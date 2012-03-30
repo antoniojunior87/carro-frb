@@ -6,7 +6,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,9 +13,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author joelamalio
  */
-public abstract class GenericRepository implements Serializable {
+public abstract class MySqlRepository implements Serializable {
 
-    private final Logger LOG = LoggerFactory.getLogger(GenericRepository.class);
+    private final Logger LOG = LoggerFactory.getLogger(MySqlRepository.class);
     private final String url = "jdbc:mysql://localhost:3306/carro";
     private final String username = "root";
     private final String password = "";
