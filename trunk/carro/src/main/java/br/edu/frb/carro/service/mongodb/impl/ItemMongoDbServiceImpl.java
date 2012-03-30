@@ -13,21 +13,21 @@ import java.util.List;
  *
  * @author joelamalio
  */
-public class ItemMongoDBServiceImpl extends ServiceAb implements ItemService {
+public class ItemMongoDbServiceImpl extends ServiceAb implements ItemService {
 
-    private DBCollection itemDBCollection;
+    private DBCollection itemDbCollection;
     private Converter<Item> converter;
 
-    public ItemMongoDBServiceImpl() {
+    public ItemMongoDbServiceImpl() {
         super();
         this.converter = new ItemConverter();
-        this.itemDBCollection = super.getMongoRepository().getItemDBCollection();
+        this.itemDbCollection = super.getMongoRepository().getItemDbCollection();
     }
 
     @Override
     public List<Item> obterPorFiltro(Item item) {
-        DBObject dBObject = this.converter.toDBObject(item);
-        DBCursor dBCursor = this.itemDBCollection.find(dBObject);
+        DBObject dBObject = this.converter.toDbObject(item);
+        DBCursor dBCursor = this.itemDbCollection.find(dBObject);
         Item itemTemp;
         List<Item> itens = new ArrayList<Item>();
 
@@ -42,14 +42,14 @@ public class ItemMongoDBServiceImpl extends ServiceAb implements ItemService {
     public Item obterPorId(Long id) {
         DBObject dBObject = new BasicDBObject();
         dBObject.put(Item.CAMPO_ID, id);
-        dBObject = this.itemDBCollection.findOne(dBObject);
+        dBObject = this.itemDbCollection.findOne(dBObject);
         return this.converter.toObject(dBObject);
     }
 
     @Override
     public boolean inserir(Item item) {
-        DBObject dBObject = this.converter.toDBObject(item);
-        WriteResult writeResult = this.itemDBCollection.insert(dBObject);
+        DBObject dBObject = this.converter.toDbObject(item);
+        WriteResult writeResult = this.itemDbCollection.insert(dBObject);
         if (writeResult.getError() != null) {
             // throw new RuntimeException("Erro ao inserir Item no MongoDB");
             return false;
@@ -60,9 +60,9 @@ public class ItemMongoDBServiceImpl extends ServiceAb implements ItemService {
     @Override
     public boolean alterar(Item item) {
         Item itemBanco = this.obterPorId(item.getId());
-        DBObject dBObjectBanco = this.converter.toDBObject(itemBanco);
-        DBObject dBObject = this.converter.toDBObject(item);
-        WriteResult writeResult = this.itemDBCollection.update(dBObjectBanco, dBObject);
+        DBObject dBObjectBanco = this.converter.toDbObject(itemBanco);
+        DBObject dBObject = this.converter.toDbObject(item);
+        WriteResult writeResult = this.itemDbCollection.update(dBObjectBanco, dBObject);
         if (writeResult.getError() != null) {
             // throw new RuntimeException("Erro ao alterar Item no MongoDB");
             return false;
@@ -73,8 +73,8 @@ public class ItemMongoDBServiceImpl extends ServiceAb implements ItemService {
     @Override
     public boolean excluir(Long id) {
         Item item = Item.Builder.get().comId(id).criar();
-        DBObject dBObject = this.converter.toDBObject(item);
-        WriteResult writeResult = this.itemDBCollection.remove(dBObject);
+        DBObject dBObject = this.converter.toDbObject(item);
+        WriteResult writeResult = this.itemDbCollection.remove(dBObject);
         if (writeResult.getError() != null) {
             // throw new RuntimeException("Erro ao excluir Item no MongoDB");
             return false;

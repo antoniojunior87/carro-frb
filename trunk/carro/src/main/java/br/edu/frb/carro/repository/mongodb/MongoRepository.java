@@ -4,7 +4,6 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
 import java.net.UnknownHostException;
-import javax.annotation.PostConstruct;
 
 /**
  *
@@ -16,7 +15,7 @@ public class MongoRepository {
     private static final String DB_TABLE_ITEM = "itemTable";
 
     private DB db;
-    private DBCollection itemDBCollection;
+    private DBCollection itemDbCollection;
 
     public MongoRepository() throws UnknownHostException {
         initDB(DB_NAME, true);
@@ -32,9 +31,9 @@ public class MongoRepository {
         this.db = mongo.getDB(dbName);
 
         // tenta obter a coleção - se não conseguir cria 
-        this.itemDBCollection = this.db.getCollection(DB_TABLE_ITEM);
-        if (this.itemDBCollection == null) {
-            this.itemDBCollection = this.db.createCollection(DB_TABLE_ITEM, null);
+        this.itemDbCollection = this.db.getCollection(DB_TABLE_ITEM);
+        if (this.itemDbCollection == null) {
+            this.itemDbCollection = this.db.createCollection(DB_TABLE_ITEM, null);
         }
         
     }
@@ -43,7 +42,7 @@ public class MongoRepository {
         return this.db;
     }
     
-    public DBCollection getItemDBCollection() {
-        return this.itemDBCollection;
+    public DBCollection getItemDbCollection() {
+        return this.itemDbCollection;
     }
 }

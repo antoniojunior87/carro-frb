@@ -1,4 +1,4 @@
-package br.edu.frb.carro.service.mysql;
+package br.edu.frb.carro.service;
 
 import br.edu.frb.carro.entity.Carro;
 import java.io.Serializable;

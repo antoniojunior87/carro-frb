@@ -17,7 +17,7 @@ public class ItemConverter implements Converter<Item> {
     }
 
     @Override
-    public DBObject toDBObject(final Item item) {
+    public DBObject toDbObject(final Item item) {
         DBObject dBObject = new BasicDBObject();
         if (item != null) {
             if (item.getId() != null) {
@@ -31,10 +31,10 @@ public class ItemConverter implements Converter<Item> {
     }
 
     @Override
-    public Item toObject(final DBObject dBObject) {
+    public Item toObject(final DBObject dbObject) {
         Item item = null;
-        if (dBObject != null) {
-            item = Item.Builder.get().comId((Long) dBObject.get(Item.CAMPO_ID)).comNome((String) dBObject.get(Item.CAMPO_NOME)).criar();
+        if (dbObject != null) {
+            item = Item.Builder.get().comId((Long) dbObject.get(Item.CAMPO_ID)).comNome((String) dbObject.get(Item.CAMPO_NOME)).criar();
         }
         return item;
     }
