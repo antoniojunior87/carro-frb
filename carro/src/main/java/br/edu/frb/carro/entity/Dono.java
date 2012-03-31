@@ -2,6 +2,7 @@ package br.edu.frb.carro.entity;
 
 import br.edu.frb.carro.enums.Sexo;
 import java.io.Serializable;
+import javax.persistence.Embedded;
 
 /**
  *
@@ -9,8 +10,12 @@ import java.io.Serializable;
  */
 public class Dono implements Serializable {
 
-    private Long cpf; 
+    public static final String CAMPO_CPF = "cpf";
+    public static final String CAMPO_NOME = "nome";
+    public static final String CAMPO_SEXO = "sexo";
+    private Long cpf;
     private String nome;
+    @Embedded
     private Sexo sexo;
 
     public Dono() {
@@ -67,5 +72,36 @@ public class Dono implements Serializable {
     public String toString() {
         return "Dono{" + "cpf=" + cpf + ", nome=" + nome + '}';
     }
-    
+
+    public static class Builder {
+
+        private Dono dono;
+
+        private Builder() {
+            this.dono = new Dono();
+        }
+
+        public static Dono.Builder get() {
+            return new Dono.Builder();
+        }
+
+        public Dono criar() {
+            return this.dono;
+        }
+
+        public Dono.Builder comCpf(final Long cpf) {
+            this.dono.setCpf(cpf);
+            return this;
+        }
+
+        public Dono.Builder comNome(final String nome) {
+            this.dono.setNome(nome);
+            return this;
+        }
+
+        public Dono.Builder com(final Sexo sexo) {
+            this.dono.setSexo(sexo);
+            return this;
+        }
+    }
 }
