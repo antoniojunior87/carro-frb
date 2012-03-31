@@ -1,11 +1,7 @@
 package br.edu.frb.carro.repository.mysql;
 
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +9,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author joelamalio
  */
-public abstract class MySqlRepository implements Serializable {
+public class MySqlRepository implements Serializable {
 
     private final Logger LOG = LoggerFactory.getLogger(MySqlRepository.class);
     private final String url = "jdbc:mysql://localhost:3306/carro";
@@ -23,7 +19,7 @@ public abstract class MySqlRepository implements Serializable {
     private Connection connection;
     private Statement statement;
 
-    protected ResultSet executeQuery(final String query) {
+    public ResultSet executeQuery(final String query) {
         ResultSet resultSet = null;
         this.carregarDriver();
         try {
@@ -36,7 +32,7 @@ public abstract class MySqlRepository implements Serializable {
         return resultSet;
     }
     
-    protected boolean executeUpdate(final String query) {
+    public boolean executeUpdate(final String query) {
         int retorno = 0;
         this.carregarDriver();
         try {
@@ -57,7 +53,7 @@ public abstract class MySqlRepository implements Serializable {
     
     
 
-    protected void close() {
+    public void close() {
         try {
             this.statement.close();
         } catch (SQLException ex) {

@@ -4,7 +4,7 @@ import br.edu.frb.carro.converter.mongodb.Converter;
 import br.edu.frb.carro.converter.mongodb.impl.ItemConverter;
 import br.edu.frb.carro.entity.Item;
 import br.edu.frb.carro.service.ItemService;
-import br.edu.frb.carro.service.mongodb.ab.ServiceAb;
+import br.edu.frb.carro.service.mongodb.ab.MongoDbServiceAb;
 import com.mongodb.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author joelamalio
  */
-public class ItemMongoDbServiceImpl extends ServiceAb implements ItemService {
+public class ItemMongoDbServiceImpl extends MongoDbServiceAb implements ItemService {
 
     private DBCollection itemDbCollection;
     private Converter<Item> converter;
@@ -47,24 +47,11 @@ public class ItemMongoDbServiceImpl extends ServiceAb implements ItemService {
     }
 
     @Override
-    public boolean inserir(Item item) {
+    public boolean salvar(Item item) {
         DBObject dBObject = this.converter.toDbObject(item);
-        WriteResult writeResult = this.itemDbCollection.insert(dBObject);
+        WriteResult writeResult = this.itemDbCollection.save(dBObject);
         if (writeResult.getError() != null) {
             // throw new RuntimeException("Erro ao inserir Item no MongoDB");
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean alterar(Item item) {
-        Item itemBanco = this.obterPorId(item.getId());
-        DBObject dBObjectBanco = this.converter.toDbObject(itemBanco);
-        DBObject dBObject = this.converter.toDbObject(item);
-        WriteResult writeResult = this.itemDbCollection.update(dBObjectBanco, dBObject);
-        if (writeResult.getError() != null) {
-            // throw new RuntimeException("Erro ao alterar Item no MongoDB");
             return false;
         }
         return true;

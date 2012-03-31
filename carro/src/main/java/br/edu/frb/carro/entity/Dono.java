@@ -2,7 +2,6 @@ package br.edu.frb.carro.entity;
 
 import br.edu.frb.carro.enums.Sexo;
 import java.io.Serializable;
-import javax.persistence.Embedded;
 
 /**
  *
@@ -15,7 +14,6 @@ public class Dono implements Serializable {
     public static final String CAMPO_SEXO = "sexo";
     private Long cpf;
     private String nome;
-    @Embedded
     private Sexo sexo;
 
     public Dono() {

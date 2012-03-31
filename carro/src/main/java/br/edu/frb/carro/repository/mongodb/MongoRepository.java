@@ -11,15 +11,17 @@ import java.net.UnknownHostException;
  */
 public class MongoRepository {
 
-    private static final String DB_NAME = "carroDB";
+    private static final String DB_NAME = "carroDb";
     private static final String DB_TABLE_ITEM = "itemTable";
     private static final String DB_TABLE_DONO = "donoTable";
+    private static final String DB_TABLE_CARRO = "carroTable";
     private DB db;
     private DBCollection itemDbCollection;
     private DBCollection donoDbCollection;
+    private DBCollection carroDbCollection;
 
     public MongoRepository() throws UnknownHostException {
-        initDB(DB_NAME, true);
+        initDB(DB_NAME, false);
     }
 
     protected final void initDB(String dbName, boolean drop) throws UnknownHostException {
@@ -40,6 +42,10 @@ public class MongoRepository {
         if (this.donoDbCollection == null) {
             this.donoDbCollection = this.db.createCollection(DB_TABLE_DONO, null);
         }
+        this.carroDbCollection = this.db.getCollection(DB_TABLE_CARRO);
+        if (this.carroDbCollection == null) {
+            this.carroDbCollection = this.db.createCollection(DB_TABLE_CARRO, null);
+        }
 
     }
 
@@ -53,5 +59,9 @@ public class MongoRepository {
 
     public DBCollection getDonoDbCollection() {
         return donoDbCollection;
+    }
+
+    public DBCollection getCarroDbCollection() {
+        return carroDbCollection;
     }
 }

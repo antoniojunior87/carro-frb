@@ -1,32 +1,33 @@
 package br.edu.frb.carro.service;
 
-import br.edu.frb.carro.service.mysql.impl.CarroServiceImpl;
 import br.edu.frb.carro.entity.Carro;
+import br.edu.frb.carro.service.mysql.impl.CarroMySqlServiceImpl;
 import java.util.List;
-import org.junit.*;
 import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  *
  * @author joelamalio
  */
-public class CarroServiceTest {
+public class CarroMySqlServiceTest {
 
-    private CarroService carroService = new CarroServiceImpl();
+    private CarroService carroService = new CarroMySqlServiceImpl();
 
     @Before
     public void setUp() {
         this.carroService.excluir(null);
-        this.carroService.inserir(Carro.Builder.get().comChassi(1L).comModelo("Modelo do Carro 1").comAno(2000).criar());
-        this.carroService.inserir(Carro.Builder.get().comChassi(2L).comModelo("Modelo do Carro 2").comAno(2005).criar());
-        this.carroService.inserir(Carro.Builder.get().comChassi(3L).comModelo("Modelo do Carro 3").comAno(2010).criar());
+        this.carroService.salvar(Carro.Builder.get().comChassi(1L).comModelo("Modelo do Carro 1").comAno(2000).criar());
+        this.carroService.salvar(Carro.Builder.get().comChassi(2L).comModelo("Modelo do Carro 2").comAno(2005).criar());
+        this.carroService.salvar(Carro.Builder.get().comChassi(3L).comModelo("Modelo do Carro 3").comAno(2010).criar());
         
     }
 
     @Test
     public void quandoInserirComSucessoDeveRetornarTrue() {
         Carro carro = Carro.Builder.get().comChassi(10L).comModelo("Modelo Novo").comAno(2012).criar();
-        assertTrue(this.carroService.inserir(carro));
+        assertTrue(this.carroService.salvar(carro));
     }
     
     @Test
@@ -74,7 +75,7 @@ public class CarroServiceTest {
         String modelo = "Modelo de Alterado";
         Carro carro = this.carroService.obterPorChassi(chassi);
         carro.setModelo(modelo);
-        this.carroService.alterar(carro);
+        this.carroService.salvar(carro);
         assertEquals(modelo.toUpperCase(), this.carroService.obterPorChassi(chassi).getModelo());
     }
     

@@ -2,6 +2,7 @@ package br.edu.frb.carro.entity;
 
 import br.edu.frb.carro.util.Util;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,7 +11,13 @@ import java.util.Set;
  * @author joelamalio
  */
 public class Carro implements Serializable {
-
+    
+    
+    public static final String CAMPO_CHASSI = "chassi";
+    public static final String CAMPO_MODELO = "modelo";
+    public static final String CAMPO_ANO = "ano";
+    public static final String CAMPO_DONO = "dono";
+    public static final String CAMPO_ITENS = "itens";
     private Long chassi;
     private String modelo;
     private Integer ano;
@@ -47,7 +54,7 @@ public class Carro implements Serializable {
     }
 
     public Set<Item> getItens() {
-        return itens;
+        return Collections.unmodifiableSet(this.itens);
     }
 
     public void setItens(Set<Item> itens) {
@@ -60,6 +67,14 @@ public class Carro implements Serializable {
 
     public void setModelo(String modelo) {
         this.modelo = modelo;
+    }
+    
+    public void adicionarItem(final Item item) {
+        this.itens.add(item);
+    }
+    
+    public void removerItem(final Item item) {
+        this.itens.remove(item);
     }
 
     @Override
@@ -121,6 +136,21 @@ public class Carro implements Serializable {
 
         public Builder comAno(final Integer ano) {
             this.carro.setAno(ano);
+            return this;
+        }
+        
+        public Builder com(final Dono dono) {
+            this.carro.setDono(dono);
+            return this;
+        }
+        
+        public Builder comItens(final Set<Item> itens) {
+            this.carro.setItens(itens);
+            return this;
+        }
+        
+        public Builder com(final Item item) {
+            this.carro.adicionarItem(item);
             return this;
         }
     }

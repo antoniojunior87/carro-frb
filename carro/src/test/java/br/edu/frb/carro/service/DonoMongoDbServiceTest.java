@@ -18,15 +18,15 @@ public class DonoMongoDbServiceTest {
 
     @Before
     public void setUp() {
-        //this.donoMongoDbService.excluir(null);
-        this.donoMongoDbService.inserir(Dono.Builder.get().comCpf(1L).comNome("Nome Dono 1").com(Sexo.FEMININO).criar());
-        this.donoMongoDbService.inserir(Dono.Builder.get().comCpf(2L).comNome("Nome Dono 2").com(Sexo.MASCULINO).criar());
+        this.donoMongoDbService.excluir(null);
+        this.donoMongoDbService.salvar(Dono.Builder.get().comCpf(1L).comNome("Nome Dono 1").com(Sexo.FEMININO).criar());
+        this.donoMongoDbService.salvar(Dono.Builder.get().comCpf(2L).comNome("Nome Dono 2").com(Sexo.MASCULINO).criar());
     }
 
     @Test
     public void quandoInserirComSucessoDeveRetornarTrue() {
         Dono dono = Dono.Builder.get().comCpf(3L).comNome("Dono Novo").com(Sexo.MASCULINO).criar();
-        assertTrue(this.donoMongoDbService.inserir(dono));
+        assertTrue(this.donoMongoDbService.salvar(dono));
     }
 
     @Test
@@ -74,7 +74,7 @@ public class DonoMongoDbServiceTest {
         String nome = "Nome Alterado";
         Dono dono = this.donoMongoDbService.obterPorCpf(cpf);
         dono.setNome(nome);
-        this.donoMongoDbService.alterar(dono);
+        this.donoMongoDbService.salvar(dono);
         assertEquals(nome, this.donoMongoDbService.obterPorCpf(cpf).getNome());
     }
 
