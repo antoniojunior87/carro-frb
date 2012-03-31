@@ -39,6 +39,6 @@ public enum Sexo implements Serializable {
 
     @Override
     public String toString() {
-        return "Sexo{" + "id=" + id + ", porExtenso=" + porExtenso + '}';
+        return this.id;
     }
 }
