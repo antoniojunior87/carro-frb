@@ -79,7 +79,12 @@
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
-            <version>2.2.1</version>
+            <version>3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.primefaces.themes</groupId>
+            <artifactId>south-street</artifactId>
+            <version>1.0.4</version>
         </dependency>
     </dependencies>
 
@@ -134,22 +139,10 @@
     </build>
     <repositories>
         <repository>
-            <url>http://download.java.net/maven/2/</url>
-            <id>jsf20</id>
+            <id>prime-repo</id>
+            <name>PrimeFaces Maven Repository</name>
+            <url>http://repository.primefaces.org</url>
             <layout>default</layout>
-            <name>Repository for library Library[jsf20]</name>
-        </repository>
-        <repository>
-            <url>http://repo1.maven.org/maven2/</url>
-            <id>jstl11</id>
-            <layout>default</layout>
-            <name>Repository for library Library[jstl11]</name>
-        </repository>
-        <repository>
-            <url>http://repository.primefaces.org/</url>
-            <id>primefaces</id>
-            <layout>default</layout>
-            <name>Repository for library Library[primefaces]</name>
         </repository>
     </repositories>
 </project>
