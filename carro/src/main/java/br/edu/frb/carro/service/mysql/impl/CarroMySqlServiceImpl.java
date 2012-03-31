@@ -1,7 +1,6 @@
 package br.edu.frb.carro.service.mysql.impl;
 
 import br.edu.frb.carro.entity.Carro;
-import br.edu.frb.carro.repository.mysql.MySqlRepository;
 import br.edu.frb.carro.service.CarroService;
 import br.edu.frb.carro.service.mysql.ab.MySqlServiceAb;
 import br.edu.frb.carro.util.Util;
@@ -31,7 +30,7 @@ public class CarroMySqlServiceImpl extends MySqlServiceAb implements CarroServic
         query.append("      carr_modelo, ");
         query.append("      carr_ano ");
         query.append("  FROM ");
-        query.append("      carro ");
+        query.append("      carro.carro ");
         query.append("  WHERE 1 = 1 ");
         if (carro != null) {
             if (carro.getChassi() != null) {
@@ -79,12 +78,10 @@ public class CarroMySqlServiceImpl extends MySqlServiceAb implements CarroServic
         query.append("      carr_modelo, ");
         query.append("      carr_ano ");
         query.append("  FROM ");
-        query.append("      carro ");
+        query.append("      carro.carro ");
         query.append("  WHERE 1 = 1 ");
-        if (chassi != null) {
-            query.append("  AND carr_chassi = ");
-            query.append(chassi);
-        }
+        query.append("  AND carr_chassi = ");
+        query.append(chassi);
         resultSet = super.getMySqlRepository().executeQuery(query.toString());
 
         try {

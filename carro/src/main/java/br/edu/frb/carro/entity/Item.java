@@ -1,5 +1,6 @@
 package br.edu.frb.carro.entity;
 
+import br.edu.frb.carro.util.Util;
 import java.io.Serializable;
 
 /**
@@ -58,6 +59,10 @@ public class Item implements Serializable {
     @Override
     public String toString() {
         return "Item{" + "id=" + id + ", nome=" + nome + '}';
+    }
+    
+    public String getNomeFormatado() {
+        return !Util.isNullOrEmpty(this.nome) ? this.nome.trim().toUpperCase() : null;
     }
 
     public static class Builder {

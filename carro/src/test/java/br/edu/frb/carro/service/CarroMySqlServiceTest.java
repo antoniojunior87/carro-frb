@@ -21,7 +21,6 @@ public class CarroMySqlServiceTest {
         this.carroService.salvar(Carro.Builder.get().comChassi(1L).comModelo("Modelo do Carro 1").comAno(2000).criar());
         this.carroService.salvar(Carro.Builder.get().comChassi(2L).comModelo("Modelo do Carro 2").comAno(2005).criar());
         this.carroService.salvar(Carro.Builder.get().comChassi(3L).comModelo("Modelo do Carro 3").comAno(2010).criar());
-        
     }
 
     @Test
@@ -72,7 +71,7 @@ public class CarroMySqlServiceTest {
     @Test
     public void quandoAlterarDeveRetornarTrue() {
         Long chassi = 1L;
-        String modelo = "Modelo de Alterado";
+        String modelo = "Modelo Alterado";
         Carro carro = this.carroService.obterPorChassi(chassi);
         carro.setModelo(modelo);
         this.carroService.salvar(carro);
