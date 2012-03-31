@@ -11,25 +11,25 @@
     </h:head>
     <body>
         <p:dataTable id="tabela" var="carro" value="#{carroFaces.listaCarro}">
-            <p:column>
+            <p:column sortBy="#{carro.modelo}">
                 <f:facet name="header">
                    #{bundle.carro_modelo}
                 </f:facet>
                 <h:outputText value="#{carro.modelo}" />
             </p:column>
-            <p:column>
+            <p:column sortBy="#{carro.ano}">
                 <f:facet name="header">
                    #{bundle.carro_ano}
                 </f:facet>
                 <h:outputText value="#{carro.ano}" />
             </p:column>
-            <p:column>
+            <p:column sortBy="#{carro.chassi}">
                 <f:facet name="header">
                    #{bundle.carro_chassi}
                 </f:facet>
                 <h:outputText value="#{carro.chassi}" />
             </p:column>
-            <p:column>
+            <p:column sortBy="#{carro.dono}">
                 <f:facet name="header">
                    #{bundle.carro_dono}
                 </f:facet>
