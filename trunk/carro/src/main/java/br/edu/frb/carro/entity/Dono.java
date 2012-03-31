@@ -1,6 +1,7 @@
 package br.edu.frb.carro.entity;
 
 import br.edu.frb.carro.enums.Sexo;
+import br.edu.frb.carro.util.Util;
 import java.io.Serializable;
 
 /**
@@ -69,6 +70,10 @@ public class Dono implements Serializable {
     @Override
     public String toString() {
         return "Dono{" + "cpf=" + cpf + ", nome=" + nome + '}';
+    }
+    
+    public String getNomeFormatado() {
+        return !Util.isNullOrEmpty(this.nome) ? this.nome.trim().toUpperCase() : null;
     }
 
     public static class Builder {
