@@ -14,9 +14,7 @@ public interface DonoService extends Serializable {
 
     public abstract Dono obterPorCpf(final Long cpf);
 
-    public abstract boolean inserir(Dono dono);
-
-    public abstract boolean alterar(Dono dono);
+    public abstract boolean salvar(Dono dono);
 
     public abstract boolean excluir(final Long cpf);
 }

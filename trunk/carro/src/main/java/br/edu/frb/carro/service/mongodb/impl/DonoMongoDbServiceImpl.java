@@ -4,7 +4,7 @@ import br.edu.frb.carro.converter.mongodb.Converter;
 import br.edu.frb.carro.converter.mongodb.impl.DonoConverter;
 import br.edu.frb.carro.entity.Dono;
 import br.edu.frb.carro.service.DonoService;
-import br.edu.frb.carro.service.mongodb.ab.ServiceAb;
+import br.edu.frb.carro.service.mongodb.ab.MongoDbServiceAb;
 import com.mongodb.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author joelamalio
  */
-public class DonoMongoDbServiceImpl extends ServiceAb implements DonoService {
+public class DonoMongoDbServiceImpl extends MongoDbServiceAb implements DonoService {
 
     private DBCollection donoDbCollection;
     private Converter<Dono> converter;
@@ -47,24 +47,11 @@ public class DonoMongoDbServiceImpl extends ServiceAb implements DonoService {
     }
 
     @Override
-    public boolean inserir(Dono dono) {
+    public boolean salvar(Dono dono) {
         DBObject dBObject = this.converter.toDbObject(dono);
-        WriteResult writeResult = this.donoDbCollection.insert(dBObject);
+        WriteResult writeResult = this.donoDbCollection.save(dBObject);
         if (writeResult.getError() != null) {
             // throw new RuntimeException("Erro ao inserir Item no MongoDB");
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean alterar(Dono dono) {
-        Dono donoBanco = this.obterPorCpf(dono.getCpf());
-        DBObject dBObjectBanco = this.converter.toDbObject(donoBanco);
-        DBObject dBObject = this.converter.toDbObject(dono);
-        WriteResult writeResult = this.donoDbCollection.update(dBObjectBanco, dBObject);
-        if (writeResult.getError() != null) {
-            // throw new RuntimeException("Erro ao alterar Item no MongoDB");
             return false;
         }
         return true;

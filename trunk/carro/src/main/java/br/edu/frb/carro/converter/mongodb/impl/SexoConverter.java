@@ -20,6 +20,7 @@ public class SexoConverter implements Converter<Sexo> {
         DBObject dBObject = new BasicDBObject();
         if (sexo != null) {
             dBObject.put(Sexo.CAMPO_ID, sexo.getId());
+            dBObject.put(_ID, sexo.getId());
             dBObject.put(Sexo.CAMPO_POR_EXTENSO, sexo.getPorExtenso());
         }
         return dBObject;

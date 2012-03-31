@@ -1,8 +1,9 @@
 package br.edu.frb.carro.service.mysql.impl;
 
 import br.edu.frb.carro.entity.Carro;
-import br.edu.frb.carro.service.CarroService;
 import br.edu.frb.carro.repository.mysql.MySqlRepository;
+import br.edu.frb.carro.service.CarroService;
+import br.edu.frb.carro.service.mysql.ab.MySqlServiceAb;
 import br.edu.frb.carro.util.Util;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,9 +16,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author joelamalio
  */
-public class CarroServiceImpl extends MySqlRepository implements CarroService {
+public class CarroMySqlServiceImpl extends MySqlServiceAb implements CarroService {
 
-    private final Logger LOG = LoggerFactory.getLogger(CarroServiceImpl.class);
+    private final Logger LOG = LoggerFactory.getLogger(CarroMySqlServiceImpl.class);
 
     @Override
     public List<Carro> obterPorFiltro(Carro carro) {
@@ -52,7 +53,7 @@ public class CarroServiceImpl extends MySqlRepository implements CarroService {
         query.append("      carr_ano ASC, ");
         query.append("      carr_modelo ASC ");
 
-        resultSet = super.executeQuery(query.toString());
+        resultSet = super.getMySqlRepository().executeQuery(query.toString());
 
         try {
             while (resultSet.next()) {
@@ -62,7 +63,7 @@ public class CarroServiceImpl extends MySqlRepository implements CarroService {
         } catch (SQLException ex) {
             LOG.error("SQLException", ex);
         } finally {
-            super.close();
+            super.getMySqlRepository().close();
         }
 
         return carros;
@@ -84,7 +85,7 @@ public class CarroServiceImpl extends MySqlRepository implements CarroService {
             query.append("  AND carr_chassi = ");
             query.append(chassi);
         }
-        resultSet = super.executeQuery(query.toString());
+        resultSet = super.getMySqlRepository().executeQuery(query.toString());
 
         try {
             while (resultSet.next()) {
@@ -93,13 +94,23 @@ public class CarroServiceImpl extends MySqlRepository implements CarroService {
         } catch (SQLException ex) {
             LOG.error("SQLException", ex);
         } finally {
-            super.close();
+            super.getMySqlRepository().close();
         }
         return carroTemp;
     }
 
     @Override
-    public boolean inserir(Carro carro) {
+    public boolean salvar(Carro carro) {
+        String query;
+        if (this.obterPorChassi(carro.getChassi()) != null) {
+            query = this.alterar(carro);
+        } else {
+            query = this.inserir(carro);
+        }
+        return super.getMySqlRepository().executeUpdate(query);
+    }
+
+    private String inserir(final Carro carro) {
         StringBuilder query = new StringBuilder();
         query.append("  INSERT INTO carro.carro ( ");
         query.append("      carr_chassi, ");
@@ -114,12 +125,10 @@ public class CarroServiceImpl extends MySqlRepository implements CarroService {
         query.append(", ");
         query.append(carro.getAno());
         query.append(") ");
-
-        return super.executeUpdate(query.toString());
+        return query.toString();
     }
 
-    @Override
-    public boolean alterar(Carro carro) {
+    private String alterar(final Carro carro) {
         StringBuilder query = new StringBuilder();
         query.append("  UPDATE carro.carro ");
         query.append("  SET ");
@@ -132,8 +141,7 @@ public class CarroServiceImpl extends MySqlRepository implements CarroService {
         query.append("  WHERE 1 = 1 ");
         query.append("  AND carr_chassi = ");
         query.append(carro.getChassi());
-
-        return super.executeUpdate(query.toString());
+        return query.toString();
     }
 
     @Override
@@ -147,6 +155,6 @@ public class CarroServiceImpl extends MySqlRepository implements CarroService {
             query.append(chassi);
         }
 
-        return super.executeUpdate(query.toString());
+        return super.getMySqlRepository().executeUpdate(query.toString());
     }
 }

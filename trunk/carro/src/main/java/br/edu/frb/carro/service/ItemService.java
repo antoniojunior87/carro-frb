@@ -14,9 +14,7 @@ public interface ItemService extends Serializable {
 
     public abstract Item obterPorId(final Long id);
 
-    public abstract boolean inserir(Item item);
-
-    public abstract boolean alterar(Item item);
+    public abstract boolean salvar(Item item);
 
     public abstract boolean excluir(final Long id);
 }

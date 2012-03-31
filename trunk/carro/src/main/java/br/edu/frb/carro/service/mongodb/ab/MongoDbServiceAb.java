@@ -10,13 +10,12 @@ import org.slf4j.LoggerFactory;
  *
  * @author joelamalio
  */
-public abstract class ServiceAb implements Serializable {
+public abstract class MongoDbServiceAb implements Serializable {
 
-    protected static final String _ID = "_id";
-    private final Logger LOG = LoggerFactory.getLogger(ServiceAb.class);
+    private final Logger LOG = LoggerFactory.getLogger(MongoDbServiceAb.class);
     private MongoRepository mongoRepository;
 
-    public ServiceAb() {
+    public MongoDbServiceAb() {
         super();
         try {
             this.mongoRepository = new MongoRepository();
@@ -25,7 +24,7 @@ public abstract class ServiceAb implements Serializable {
         }
     }
 
-    protected MongoRepository getMongoRepository() {
+    public MongoRepository getMongoRepository() {
         return mongoRepository;
     }
 }

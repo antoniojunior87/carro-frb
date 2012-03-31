@@ -14,9 +14,7 @@ public interface CarroService extends Serializable {
     
     public abstract Carro obterPorChassi(final Long chassi);
     
-    public abstract boolean inserir(Carro carro);
-    
-    public abstract boolean alterar(Carro carro);
+    public abstract boolean salvar(Carro carro);
     
     public abstract boolean excluir(final Long chassi);
 }

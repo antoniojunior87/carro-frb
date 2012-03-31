@@ -27,6 +27,7 @@ public class DonoConverter implements Converter<Dono> {
         if (dono != null) {
             if (dono.getCpf() != null) {
                 dBObject.put(Dono.CAMPO_CPF, dono.getCpf());
+                dBObject.put(_ID, dono.getCpf().hashCode());
             }
             if (!Util.isNullOrEmpty(dono.getNome())) {
                 dBObject.put(Dono.CAMPO_NOME, dono.getNome());

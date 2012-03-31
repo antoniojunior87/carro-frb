@@ -17,15 +17,15 @@ public class ItemMongoDbServiceTest {
 
     @Before
     public void setUp() {
-        //this.itemMongoDbService.excluir(null);
-        this.itemMongoDbService.inserir(Item.Builder.get().comId(1L).comNome("Nome Item 1").criar());
-        this.itemMongoDbService.inserir(Item.Builder.get().comId(2L).comNome("Nome Item 2").criar());
+        this.itemMongoDbService.excluir(null);
+        this.itemMongoDbService.salvar(Item.Builder.get().comId(1L).comNome("Nome Item 1").criar());
+        this.itemMongoDbService.salvar(Item.Builder.get().comId(2L).comNome("Nome Item 2").criar());
     }
 
     @Test
     public void quandoInserirComSucessoDeveRetornarTrue() {
         Item item = Item.Builder.get().comId(3L).comNome("Item Novo").criar();
-        assertTrue(this.itemMongoDbService.inserir(item));
+        assertTrue(this.itemMongoDbService.salvar(item));
     }
 
     @Test
@@ -57,7 +57,7 @@ public class ItemMongoDbServiceTest {
         String nome = "Nome Alterado";
         Item item = this.itemMongoDbService.obterPorId(id);
         item.setNome(nome);
-        this.itemMongoDbService.alterar(item);
+        this.itemMongoDbService.salvar(item);
         assertEquals(nome, this.itemMongoDbService.obterPorId(id).getNome());
     }
 
