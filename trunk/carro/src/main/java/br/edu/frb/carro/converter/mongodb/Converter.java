@@ -1,5 +1,6 @@
 package br.edu.frb.carro.converter.mongodb;
 
+import br.edu.frb.carro.enums.Sexo;
 import com.mongodb.DBObject;
 
 /**
@@ -9,12 +10,12 @@ import com.mongodb.DBObject;
 public interface Converter<T> {
 
     /**
-     * A partir de um objeto da aplicação, cria documento BSON correspondente.
+     * A partir de um objeto da aplicacao, cria documento BSON correspondente.
      */
-    public DBObject toDBObject(final T t);
+    public DBObject toDbObject(final T t);
 
     /**
-     * A partir de um documento BSON, cria objeto da aplicação correspondente.
+     * A partir de um documento BSON, cria objeto da aplicacao correspondente.
      */
-    public T toObject(final DBObject dBObject);
+    public T toObject(final DBObject dbObject);
 }

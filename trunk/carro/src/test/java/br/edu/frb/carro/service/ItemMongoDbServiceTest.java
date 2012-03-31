@@ -3,9 +3,9 @@ package br.edu.frb.carro.service;
 import br.edu.frb.carro.entity.Item;
 import br.edu.frb.carro.service.mongodb.impl.ItemMongoDbServiceImpl;
 import java.util.List;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -20,7 +20,6 @@ public class ItemMongoDbServiceTest {
         //this.itemMongoDbService.excluir(null);
         this.itemMongoDbService.inserir(Item.Builder.get().comId(1L).comNome("Nome Item 1").criar());
         this.itemMongoDbService.inserir(Item.Builder.get().comId(2L).comNome("Nome Item 2").criar());
-
     }
 
     @Test
