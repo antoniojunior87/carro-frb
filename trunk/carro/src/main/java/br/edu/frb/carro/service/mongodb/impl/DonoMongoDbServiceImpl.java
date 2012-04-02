@@ -3,8 +3,10 @@ package br.edu.frb.carro.service.mongodb.impl;
 import br.edu.frb.carro.converter.mongodb.Converter;
 import br.edu.frb.carro.converter.mongodb.impl.DonoConverter;
 import br.edu.frb.carro.entity.Dono;
+import br.edu.frb.carro.exception.ListaException;
 import br.edu.frb.carro.service.DonoService;
 import br.edu.frb.carro.service.mongodb.ab.MongoDbServiceAb;
+import br.edu.frb.carro.util.Util;
 import com.mongodb.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +49,8 @@ public class DonoMongoDbServiceImpl extends MongoDbServiceAb implements DonoServ
     }
 
     @Override
-    public boolean salvar(Dono dono) {
+    public boolean salvar(final Dono dono) {
+        this.validar(dono);
         DBObject dBObject = this.converter.toDbObject(dono);
         WriteResult writeResult = this.donoDbCollection.save(dBObject);
         if (writeResult.getError() != null) {
@@ -67,6 +70,20 @@ public class DonoMongoDbServiceImpl extends MongoDbServiceAb implements DonoServ
             return false;
         }
         return true;
+    }
+    
+    private void validar(final Dono dono) throws ListaException {
+        ListaException listaException = new ListaException();
+        if (dono == null) {
+            listaException.inserirException("exception_dono_null");
+        } else {
+            if (Util.isNullOrEmpty(dono.getCpf())) {
+                listaException.inserirException("warn_campo_obrigatorio", "label_dono_cpf");
+            }
+        }
+        if (!Util.isNullOrEmpty(listaException.getExceptions())) {
+            throw listaException;
+        }
     }
     
 }

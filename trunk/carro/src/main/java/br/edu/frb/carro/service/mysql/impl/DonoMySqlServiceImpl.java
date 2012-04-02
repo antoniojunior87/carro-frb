@@ -1,7 +1,9 @@
 package br.edu.frb.carro.service.mysql.impl;
 
 import br.edu.frb.carro.entity.Dono;
+import br.edu.frb.carro.entity.Item;
 import br.edu.frb.carro.enums.Sexo;
+import br.edu.frb.carro.exception.ListaException;
 import br.edu.frb.carro.service.DonoService;
 import br.edu.frb.carro.service.mysql.ab.MySqlServiceAb;
 import br.edu.frb.carro.util.Util;
@@ -99,8 +101,9 @@ public class DonoMySqlServiceImpl extends MySqlServiceAb implements DonoService 
     }
 
     @Override
-    public boolean salvar(Dono dono) {
+    public boolean salvar(final Dono dono) throws ListaException {
         String query;
+        this.validar(dono);
         if (this.obterPorCpf(dono.getCpf()) != null) {
             query = this.alterar(dono);
         } else {
@@ -159,5 +162,19 @@ public class DonoMySqlServiceImpl extends MySqlServiceAb implements DonoService 
         }
 
         return super.getMySqlRepository().executeUpdate(query.toString());
+    }
+    
+    private void validar(final Dono dono) throws ListaException {
+        ListaException listaException = new ListaException();
+        if (dono == null) {
+            listaException.inserirException("exception_dono_null");
+        } else {
+            if (Util.isNullOrEmpty(dono.getCpf())) {
+                listaException.inserirException("warn_campo_obrigatorio", "label_dono_cpf");
+            }
+        }
+        if (!Util.isNullOrEmpty(listaException.getExceptions())) {
+            throw listaException;
+        }
     }
 }
