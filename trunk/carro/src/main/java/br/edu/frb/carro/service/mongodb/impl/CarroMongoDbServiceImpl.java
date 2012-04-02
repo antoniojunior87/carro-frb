@@ -3,8 +3,10 @@ package br.edu.frb.carro.service.mongodb.impl;
 import br.edu.frb.carro.converter.mongodb.Converter;
 import br.edu.frb.carro.converter.mongodb.impl.CarroConverter;
 import br.edu.frb.carro.entity.Carro;
+import br.edu.frb.carro.exception.ListaException;
 import br.edu.frb.carro.service.CarroService;
 import br.edu.frb.carro.service.mongodb.ab.MongoDbServiceAb;
+import br.edu.frb.carro.util.Util;
 import com.mongodb.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +49,8 @@ public class CarroMongoDbServiceImpl extends MongoDbServiceAb implements CarroSe
     }
 
     @Override
-    public boolean salvar(Carro carro) {
+    public boolean salvar(final Carro carro) {
+        this.validar(carro);
         DBObject dBObject = this.converter.toDbObject(carro);
         WriteResult writeResult = this.carroDbCollection.save(dBObject);
         if (writeResult.getError() != null) {
@@ -67,5 +70,19 @@ public class CarroMongoDbServiceImpl extends MongoDbServiceAb implements CarroSe
             return false;
         }
         return true;
+    }
+    
+    private void validar(final Carro carro) throws ListaException {
+        ListaException listaException = new ListaException();
+        if (carro == null) {
+            listaException.inserirException("exception_carro_null");
+        } else {
+            if (Util.isNullOrEmpty(carro.getChassi())) {
+                listaException.inserirException("warn_campo_obrigatorio", "label_carro_chassi");
+            }
+        }
+        if (!Util.isNullOrEmpty(listaException.getExceptions())) {
+            throw listaException;
+        }
     }
 }

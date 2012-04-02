@@ -11,11 +11,11 @@
     <body>
         <h:form id="form">
             <h:panelGrid columns="4">
-                <h:outputLabel value="#{bundle.carro_modelo}"/>
+                <h:outputLabel value="#{bundle.label_carro_modelo}"/>
                 <p:inputText value="#{carroFaces.filtro.modelo}"/>
-                <h:outputLabel value="#{bundle.carro_ano}"/>
+                <h:outputLabel value="#{bundle.label_carro_ano}"/>
                 <p:inputText value="#{carroFaces.filtro.ano}"/>
-                <h:outputLabel value="#{bundle.carro_chassi}"/>
+                <h:outputLabel value="#{bundle.label_carro_chassi}"/>
                 <p:inputText value="#{carroFaces.filtro.chassi}"/>
             </h:panelGrid>
             <h:panelGroup>
@@ -26,25 +26,25 @@
             <p:dataTable id="tabela" var="carro" value="#{carroFaces.listaCarro}">
                 <p:column sortBy="#{carro.modelo}">
                     <f:facet name="header">
-                        #{bundle.carro_modelo}
+                        #{bundle.label_carro_modelo}
                     </f:facet>
                     <h:outputText value="#{carro.modelo}" />
                 </p:column>
                 <p:column sortBy="#{carro.ano}">
                     <f:facet name="header">
-                        #{bundle.carro_ano}
+                        #{bundle.label_carro_ano}
                     </f:facet>
                     <h:outputText value="#{carro.ano}" />
                 </p:column>
                 <p:column sortBy="#{carro.chassi}">
                     <f:facet name="header">
-                        #{bundle.carro_chassi}
+                        #{bundle.label_carro_chassi}
                     </f:facet>
                     <h:outputText value="#{carro.chassi}" />
                 </p:column>
                 <p:column sortBy="#{carro.dono}">
                     <f:facet name="header">
-                        #{bundle.carro_dono}
+                        #{bundle.label_carro_dono}
                     </f:facet>
                     <h:outputText value="#{carro.dono.nome}" />
                 </p:column>
