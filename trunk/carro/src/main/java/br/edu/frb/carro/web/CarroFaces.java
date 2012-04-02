@@ -2,6 +2,7 @@ package br.edu.frb.carro.web;
 
 import br.edu.frb.carro.entity.Carro;
 import br.edu.frb.carro.entity.Dono;
+import br.edu.frb.carro.exception.ListaException;
 import br.edu.frb.carro.service.CarroService;
 import br.edu.frb.carro.service.DonoService;
 import br.edu.frb.carro.service.mysql.impl.CarroMySqlServiceImpl;
@@ -9,8 +10,10 @@ import br.edu.frb.carro.service.mysql.impl.DonoMySqlServiceImpl;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 /**
  * @author antonio.junior
@@ -43,9 +46,17 @@ public class CarroFaces {
     }
 
     public String salvar() {
-        getCarroService().salvar(carro);
-        carro = new Carro();
-        return "listaCarro.xhtml";
+        String retorno = null;
+        try {
+            getCarroService().salvar(carro);
+            carro = new Carro();
+            retorno = "listaCarro.xhtml";
+        } catch (ListaException le) {
+            for (String exception : le.getExceptions()) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(exception));
+            }
+        }
+        return retorno;
     }
 
     public void excluir(Carro carroSelecionado) {
