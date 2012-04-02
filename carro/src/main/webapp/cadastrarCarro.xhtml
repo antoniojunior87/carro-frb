@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+        <title>#{bundle.title_cadastroCarro}</title>
+    </h:head>
+    <body>
+        <p:growl autoUpdate="true"/>
+        <h:form id="form">
+            <h:panelGrid columns="4">
+                <h:outputLabel value="#{bundle.carro_modelo}"/>
+                <p:inputText value="#{carroFaces.carro.modelo}"/>
+                <h:outputLabel value="#{bundle.carro_ano}"/>
+                <p:inputText value="#{carroFaces.carro.ano}"/>
+                <h:outputLabel value="#{bundle.carro_chassi}"/>
+                <p:inputText value="#{carroFaces.carro.chassi}"/>
+                <h:outputLabel value="#{bundle.carro_dono}"/>
+                <p:selectOneMenu value="#{carroFaces.carro.dono}">
+                    <f:selectItem itemValue="" itemLabel=""/>
+                    <f:selectItems value="#{carroFaces.listaDono}" var="dono" itemLabel="#{dono.nome}" itemValue="#{dono}"/>
+                </p:selectOneMenu>
+            </h:panelGrid>
+            <h:panelGroup>
+                <p:commandButton action="#{carroFaces.salvar}" value="#{bundle.botao_salvar}" ajax="false"/>
+            </h:panelGroup>
+        </h:form>
+    </body>
+</html>
