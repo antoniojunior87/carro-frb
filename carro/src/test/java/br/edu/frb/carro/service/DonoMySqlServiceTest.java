@@ -2,6 +2,7 @@ package br.edu.frb.carro.service;
 
 import br.edu.frb.carro.entity.Dono;
 import br.edu.frb.carro.enums.Sexo;
+import br.edu.frb.carro.exception.ListaException;
 import br.edu.frb.carro.service.mysql.impl.DonoMySqlServiceImpl;
 import java.util.List;
 import static org.junit.Assert.*;
@@ -28,9 +29,32 @@ public class DonoMySqlServiceTest {
     }
 
     @Test
-    public void quandoInserirComSucessoDeveRetornarTrue() {
+    public void quandoSalvarUmRegistroNovoCompletamentePreenchidoDeveRetornarTrue() {
         Dono dono = Dono.Builder.get().comCpf(10L).comNome("Nome Novo").com(Sexo.MASCULINO).criar();
         assertTrue(this.donoService.salvar(dono));
+    }
+    
+    @Test
+    public void quandoSalvarUmRegistroNovoSemCpfPreenchidoDeveRetornarUmaListaException() {
+        Dono dono = Dono.Builder.get().comNome("Nome Novo").com(Sexo.MASCULINO).criar();
+        try {
+            this.donoService.salvar(dono);
+            fail();
+        } catch(ListaException le) {
+            ListaException exceptions = ListaException.Builder.get().com("warn_campo_obrigatorio", "label_dono_cpf").criar();
+            assertEquals(1, le.getExceptions().size());
+            assertEquals(le.getExceptions().get(0), exceptions.getExceptions().get(0));
+        }
+    }
+    
+    @Test
+    public void quandoSalvarUmRegistroNovoApenasComIdDeveRetornarUmaListaException() {
+        Long cpf = 1L;
+        String nome = "Nome Alterado";
+        Dono dono = this.donoService.obterPorCpf(cpf);
+        dono.setNome(nome);
+        this.donoService.salvar(dono);
+        assertEquals(nome.toUpperCase(), this.donoService.obterPorCpf(cpf).getNomeFormatado());
     }
 
     @Test
@@ -78,16 +102,6 @@ public class DonoMySqlServiceTest {
         Dono dono = this.donoService.obterPorCpf(cpf);
         assertNotNull(dono);
         assertEquals(dono.getCpf(), cpf);
-    }
-
-    @Test
-    public void quandoAlterarDeveRetornarTrue() {
-        Long cpf = 1L;
-        String nome = "Nome Alterado";
-        Dono dono = this.donoService.obterPorCpf(cpf);
-        dono.setNome(nome);
-        this.donoService.salvar(dono);
-        assertEquals(nome.toUpperCase(), this.donoService.obterPorCpf(cpf).getNomeFormatado());
     }
 
     @Test

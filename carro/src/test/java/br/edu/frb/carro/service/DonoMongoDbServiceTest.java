@@ -2,6 +2,7 @@ package br.edu.frb.carro.service;
 
 import br.edu.frb.carro.entity.Dono;
 import br.edu.frb.carro.enums.Sexo;
+import br.edu.frb.carro.exception.ListaException;
 import br.edu.frb.carro.service.mongodb.impl.DonoMongoDbServiceImpl;
 import java.util.List;
 import static org.junit.Assert.*;
@@ -24,9 +25,32 @@ public class DonoMongoDbServiceTest {
     }
 
     @Test
-    public void quandoInserirComSucessoDeveRetornarTrue() {
+    public void quandoSalvarUmRegistroNovoCompletamentePreenchidoDeveRetornarTrue() {
         Dono dono = Dono.Builder.get().comCpf(3L).comNome("Dono Novo").com(Sexo.MASCULINO).criar();
         assertTrue(this.donoMongoDbService.salvar(dono));
+    }
+    
+    @Test
+    public void quandoSalvarUmRegistroNovoSemCpfPreenchidoDeveRetornarUmaListaException() {
+        Dono dono = Dono.Builder.get().comNome("Nome Novo").com(Sexo.MASCULINO).criar();
+        try {
+            this.donoMongoDbService.salvar(dono);
+            fail();
+        } catch(ListaException le) {
+            ListaException exceptions = ListaException.Builder.get().com("warn_campo_obrigatorio", "label_dono_cpf").criar();
+            assertEquals(1, le.getExceptions().size());
+            assertEquals(le.getExceptions().get(0), exceptions.getExceptions().get(0));
+        }
+    }
+    
+    @Test
+    public void quandoSalvarUmRegistroNovoApenasComIdDeveRetornarUmaListaException() {
+        Long cpf = 1L;
+        String nome = "Nome Alterado";
+        Dono dono = this.donoMongoDbService.obterPorCpf(cpf);
+        dono.setNome(nome);
+        this.donoMongoDbService.salvar(dono);
+        assertEquals(nome.toUpperCase(), this.donoMongoDbService.obterPorCpf(cpf).getNomeFormatado());
     }
 
     @Test
@@ -66,16 +90,6 @@ public class DonoMongoDbServiceTest {
         List<Dono> donos = this.donoMongoDbService.obterPorFiltro(dono);
         assertNotNull(donos);
         assertEquals(1, donos.size());
-    }
-
-    @Test
-    public void quandoAlterarDeveRetornarTrue() {
-        Long cpf = 1L;
-        String nome = "Nome Alterado";
-        Dono dono = this.donoMongoDbService.obterPorCpf(cpf);
-        dono.setNome(nome);
-        this.donoMongoDbService.salvar(dono);
-        assertEquals(nome, this.donoMongoDbService.obterPorCpf(cpf).getNome());
     }
 
     @Test
