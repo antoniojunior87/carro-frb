@@ -48,7 +48,7 @@ public class DonoMySqlServiceTest {
     }
     
     @Test
-    public void quandoSalvarUmRegistroNovoApenasComIdDeveRetornarUmaListaException() {
+    public void quandoSalvarUmRegistroExistenteCompletamentePreenchidoDeveRetornarTrue() {
         Long cpf = 1L;
         String nome = "Nome Alterado";
         Dono dono = this.donoService.obterPorCpf(cpf);

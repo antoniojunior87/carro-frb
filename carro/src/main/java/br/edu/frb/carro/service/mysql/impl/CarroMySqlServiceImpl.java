@@ -1,6 +1,8 @@
 package br.edu.frb.carro.service.mysql.impl;
 
 import br.edu.frb.carro.entity.Carro;
+import br.edu.frb.carro.entity.Dono;
+import br.edu.frb.carro.exception.ListaException;
 import br.edu.frb.carro.service.CarroService;
 import br.edu.frb.carro.service.mysql.ab.MySqlServiceAb;
 import br.edu.frb.carro.util.Util;
@@ -97,8 +99,9 @@ public class CarroMySqlServiceImpl extends MySqlServiceAb implements CarroServic
     }
 
     @Override
-    public boolean salvar(Carro carro) {
+    public boolean salvar(final Carro carro) throws ListaException {
         String query;
+        this.validar(carro);
         if (this.obterPorChassi(carro.getChassi()) != null) {
             query = this.alterar(carro);
         } else {
@@ -153,5 +156,19 @@ public class CarroMySqlServiceImpl extends MySqlServiceAb implements CarroServic
         }
 
         return super.getMySqlRepository().executeUpdate(query.toString());
+    }
+    
+    private void validar(final Carro carro) throws ListaException {
+        ListaException listaException = new ListaException();
+        if (carro == null) {
+            listaException.inserirException("exception_carro_null");
+        } else {
+            if (Util.isNullOrEmpty(carro.getChassi())) {
+                listaException.inserirException("warn_campo_obrigatorio", "label_carro_chassi");
+            }
+        }
+        if (!Util.isNullOrEmpty(listaException.getExceptions())) {
+            throw listaException;
+        }
     }
 }

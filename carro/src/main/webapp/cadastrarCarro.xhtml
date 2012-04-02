@@ -12,13 +12,13 @@
         <p:growl autoUpdate="true"/>
         <h:form id="form">
             <h:panelGrid columns="4">
-                <h:outputLabel value="#{bundle.carro_modelo}"/>
+                <h:outputLabel value="#{bundle.label_carro_modelo}"/>
                 <p:inputText value="#{carroFaces.carro.modelo}"/>
-                <h:outputLabel value="#{bundle.carro_ano}"/>
+                <h:outputLabel value="#{bundle.label_carro_ano}"/>
                 <p:inputText value="#{carroFaces.carro.ano}"/>
-                <h:outputLabel value="#{bundle.carro_chassi}"/>
+                <h:outputLabel value="#{bundle.label_carro_chassi}"/>
                 <p:inputText value="#{carroFaces.carro.chassi}"/>
-                <h:outputLabel value="#{bundle.carro_dono}"/>
+                <h:outputLabel value="#{bundle.label_carro_dono}"/>
                 <p:selectOneMenu value="#{carroFaces.carro.dono}">
                     <f:selectItem itemValue="" itemLabel=""/>
                     <f:selectItems value="#{carroFaces.listaDono}" var="dono" itemLabel="#{dono.nome}" itemValue="#{dono}"/>

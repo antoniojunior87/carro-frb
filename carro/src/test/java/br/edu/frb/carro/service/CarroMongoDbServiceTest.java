@@ -3,6 +3,7 @@ package br.edu.frb.carro.service;
 import br.edu.frb.carro.entity.Carro;
 import br.edu.frb.carro.entity.Dono;
 import br.edu.frb.carro.enums.Sexo;
+import br.edu.frb.carro.exception.ListaException;
 import br.edu.frb.carro.service.mongodb.impl.CarroMongoDbServiceImpl;
 import java.util.List;
 import static org.junit.Assert.*;
@@ -29,9 +30,32 @@ public class CarroMongoDbServiceTest {
     }
 
     @Test
-    public void quandoInserirComSucessoDeveRetornarTrue() {
-        Carro carro = Carro.Builder.get().comChassi(10L).comModelo("Modelo Carro 10").comAno(1980).criar();
+    public void quandoSalvarUmRegistroNovoCompletamentePreenchidoDeveRetornarTrue() {
+        Carro carro = Carro.Builder.get().comChassi(10L).comModelo("Modelo Novo").comAno(2012).criar();
         assertTrue(this.carroMongoDbService.salvar(carro));
+    }
+    
+    @Test
+    public void quandoSalvarUmRegistroNovoSemChassiPreenchidoDeveRetornarUmaListaException() {
+        Carro carro = Carro.Builder.get().comModelo("Modelo Novo").comAno(2012).criar();
+        try {
+            this.carroMongoDbService.salvar(carro);
+            fail();
+        } catch(ListaException le) {
+            ListaException exceptions = ListaException.Builder.get().com("warn_campo_obrigatorio", "label_carro_chassi").criar();
+            assertEquals(1, le.getExceptions().size());
+            assertEquals(le.getExceptions().get(0), exceptions.getExceptions().get(0));
+        }
+    }
+    
+    @Test
+    public void quandoSalvarUmRegistroExistenteCompletamentePreenchidoDeveRetornarTrue() {
+        Long chassi = 1L;
+        String modelo = "Modelo Alterado";
+        Carro carro = this.carroMongoDbService.obterPorChassi(chassi);
+        carro.setModelo(modelo);
+        this.carroMongoDbService.salvar(carro);
+        assertEquals(modelo.toUpperCase(), this.carroMongoDbService.obterPorChassi(chassi).getModeloFormatado());
     }
 
     @Test
@@ -57,15 +81,6 @@ public class CarroMongoDbServiceTest {
         assertEquals(1, carros.size());
     }
 
-    @Test
-    public void quandoAlterarDeveRetornarTrue() {
-        Long chassi = 1L;
-        String modelo = "Modelo Alterado";
-        Carro carro = this.carroMongoDbService.obterPorChassi(chassi);
-        carro.setModelo(modelo);
-        this.carroMongoDbService.salvar(carro);
-        assertEquals(modelo, this.carroMongoDbService.obterPorChassi(chassi).getModelo());
-    }
 
     @Test
     public void quandoExcluirUmRegistroExistenteDeveRetornarTrue() {
