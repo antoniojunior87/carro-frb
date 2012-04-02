@@ -1,6 +1,7 @@
 package br.edu.frb.carro.service.mysql.impl;
 
 import br.edu.frb.carro.entity.Item;
+import br.edu.frb.carro.exception.ListaException;
 import br.edu.frb.carro.service.ItemService;
 import br.edu.frb.carro.service.mysql.ab.MySqlServiceAb;
 import br.edu.frb.carro.util.Util;
@@ -90,8 +91,9 @@ public class ItemMySqlServiceImpl extends MySqlServiceAb implements ItemService 
     }
 
     @Override
-    public boolean salvar(Item item) {
+    public boolean salvar(final Item item) throws ListaException {
         String query;
+        this.validar(item);
         if (this.obterPorId(item.getId()) != null) {
             query = this.alterar(item);
         } else {
@@ -141,5 +143,22 @@ public class ItemMySqlServiceImpl extends MySqlServiceAb implements ItemService 
         }
 
         return super.getMySqlRepository().executeUpdate(query.toString());
+    }
+    
+    private void validar(final Item item) throws ListaException {
+        ListaException listaException = new ListaException();
+        if (item == null) {
+            listaException.inserirException("exception_item_null");
+        } else {
+            if (Util.isNullOrEmpty(item.getId())) {
+                listaException.inserirException("warn_campo_obrigatorio", "label_item_id");
+            }
+            if (Util.isNullOrEmpty(item.getNome())) {
+                listaException.inserirException("warn_campo_obrigatorio", "label_item_nome");
+            }
+        }
+        if (!Util.isNullOrEmpty(listaException.getExceptions())) {
+            throw listaException;
+        }
     }
 }

@@ -3,8 +3,10 @@ package br.edu.frb.carro.service.mongodb.impl;
 import br.edu.frb.carro.converter.mongodb.Converter;
 import br.edu.frb.carro.converter.mongodb.impl.ItemConverter;
 import br.edu.frb.carro.entity.Item;
+import br.edu.frb.carro.exception.ListaException;
 import br.edu.frb.carro.service.ItemService;
 import br.edu.frb.carro.service.mongodb.ab.MongoDbServiceAb;
+import br.edu.frb.carro.util.Util;
 import com.mongodb.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +49,8 @@ public class ItemMongoDbServiceImpl extends MongoDbServiceAb implements ItemServ
     }
 
     @Override
-    public boolean salvar(Item item) {
+    public boolean salvar(final Item item) throws ListaException {
+        this.validar(item);
         DBObject dBObject = this.converter.toDbObject(item);
         WriteResult writeResult = this.itemDbCollection.save(dBObject);
         if (writeResult.getError() != null) {
@@ -67,5 +70,22 @@ public class ItemMongoDbServiceImpl extends MongoDbServiceAb implements ItemServ
             return false;
         }
         return true;
+    }
+    
+    private void validar(final Item item) throws ListaException {
+        ListaException listaException = new ListaException();
+        if (item == null) {
+            listaException.inserirException("exception_item_null");
+        } else {
+            if (Util.isNullOrEmpty(item.getId())) {
+                listaException.inserirException("warn_campo_obrigatorio", "label_item_id");
+            }
+            if (Util.isNullOrEmpty(item.getNome())) {
+                listaException.inserirException("warn_campo_obrigatorio", "label_item_nome");
+            }
+        }
+        if (!Util.isNullOrEmpty(listaException.getExceptions())) {
+            throw listaException;
+        }
     }
 }
