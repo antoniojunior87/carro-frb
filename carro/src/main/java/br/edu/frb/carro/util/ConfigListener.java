@@ -11,6 +11,8 @@ public class ConfigListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         System.getProperties().put("org.apache.el.parser.COERCE_TO_ZERO", "false");
+        System.setProperty("DEBUG.MONGO", "true");
+        System.setProperty("DB.TRACE", "true");
     }
 
     @Override

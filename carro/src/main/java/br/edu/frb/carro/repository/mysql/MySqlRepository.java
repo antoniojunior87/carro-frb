@@ -18,8 +18,10 @@ public class MySqlRepository implements Serializable {
     private final String driverName = "com.mysql.jdbc.Driver";
     private Connection connection;
     private Statement statement;
+    private static String sql;
 
     public ResultSet executeQuery(final String query) {
+        sql = query;
         ResultSet resultSet = null;
         this.carregarDriver();
         try {
@@ -31,8 +33,9 @@ public class MySqlRepository implements Serializable {
         }
         return resultSet;
     }
-    
+
     public boolean executeUpdate(final String query) {
+        sql = query;
         int retorno = 0;
         this.carregarDriver();
         try {
@@ -50,8 +53,8 @@ public class MySqlRepository implements Serializable {
         }
         return retorno > 0;
     }
-    
-    
+
+
 
     public void close() {
         try {
@@ -80,5 +83,9 @@ public class MySqlRepository implements Serializable {
         } catch (ClassNotFoundException ex) {
             LOG.error("ClassNotFoundException", ex);
         }
+    }
+
+    public static String obterUltimaConsulta() {
+        return sql;
     }
 }

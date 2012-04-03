@@ -1,12 +1,23 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
-    <h:head>
-        <title>Carro FRB</title>
-    </h:head>
-    <h:body>
-        Carro FRB
-    </h:body>
-</html>
-
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template.xhtml">
+    <ui:define name="conteudoPagina">
+        <h:form>
+            <p:fieldset legend="#{bundle.index_selecioneBanco}" style="width: 30%;">
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.index_banco}"/>
+                    <p:selectOneMenu value="#{indexFaces.bancoSelecionado}">
+                        <f:selectItems value="#{indexFaces.listaBancos}"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <h:panelGroup>
+                    <p:commandButton action="/listaCarro.xhtml" value="#{bundle.botao_confirmar}" ajax="false"/>
+                </h:panelGroup>
+            </p:fieldset>
+        </h:form>
+    </ui:define>
+</ui:composition>
