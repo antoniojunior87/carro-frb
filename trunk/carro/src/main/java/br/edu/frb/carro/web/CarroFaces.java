@@ -3,8 +3,11 @@ package br.edu.frb.carro.web;
 import br.edu.frb.carro.entity.Carro;
 import br.edu.frb.carro.entity.Dono;
 import br.edu.frb.carro.exception.ListaException;
+import br.edu.frb.carro.repository.mysql.MySqlRepository;
 import br.edu.frb.carro.service.CarroService;
 import br.edu.frb.carro.service.DonoService;
+import br.edu.frb.carro.service.mongodb.impl.CarroMongoDbServiceImpl;
+import br.edu.frb.carro.service.mongodb.impl.DonoMongoDbServiceImpl;
 import br.edu.frb.carro.service.mysql.impl.CarroMySqlServiceImpl;
 import br.edu.frb.carro.service.mysql.impl.DonoMySqlServiceImpl;
 import java.util.Collections;
@@ -22,19 +25,22 @@ import javax.faces.context.FacesContext;
 @ManagedBean(name = "carroFaces")
 public class CarroFaces {
 
-    private CarroService carroService = new CarroMySqlServiceImpl();
-    private DonoService donoService = new DonoMySqlServiceImpl();
+    private CarroService carroServiceMySql = new CarroMySqlServiceImpl();
+    private DonoService donoServiceMySql = new DonoMySqlServiceImpl();
+    private CarroService carroServiceMongo = new CarroMongoDbServiceImpl();
+    private DonoService donoServiceMongo = new DonoMongoDbServiceImpl();
     private Carro filtro;
     private Carro carro;
     private List<Carro> listaCarro = Collections.EMPTY_LIST;
     private List<Dono> listaDono = Collections.EMPTY_LIST;
+    private String query;
 
     @PostConstruct
     public void init() {
         filtro = new Carro();
         carro = new Carro();
+        updateQuery();
         listaCarro = getCarroService().obterPorFiltro(null);
-        listaDono = getDonoService().obterPorFiltro(null);
     }
 
     public void limpar() {
@@ -43,12 +49,14 @@ public class CarroFaces {
 
     public void pesquisar() {
         listaCarro = getCarroService().obterPorFiltro(filtro);
+        updateQuery();
     }
 
     public String salvar() {
         String retorno = null;
         try {
             getCarroService().salvar(carro);
+            updateQuery();
             carro = new Carro();
             retorno = "listaCarro.xhtml";
         } catch (ListaException le) {
@@ -61,7 +69,8 @@ public class CarroFaces {
 
     public void excluir(Carro carroSelecionado) {
         getCarroService().excluir(carroSelecionado.getChassi());
-        pesquisar();
+        updateQuery();
+        listaCarro = getCarroService().obterPorFiltro(filtro);
     }
 
     public List<Carro> getListaCarro() {
@@ -89,6 +98,9 @@ public class CarroFaces {
     }
 
     public List<Dono> getListaDono() {
+        if (listaDono == null) {
+            listaDono = getDonoService().obterPorFiltro(null);
+        }
         return listaDono;
     }
 
@@ -96,11 +108,23 @@ public class CarroFaces {
         this.listaDono = listaDono;
     }
 
+    public String getQuery() {
+        return query;
+    }
+
+    public void updateQuery() {
+        if (IndexFaces.obterBancoSelecionado() == 1) {
+            query = MySqlRepository.obterUltimaConsulta();
+        } else {
+            query = CarroMongoDbServiceImpl.obterUltimaConsulta();
+        }
+    }
+
     public CarroService getCarroService() {
-        return carroService;
+        return IndexFaces.obterBancoSelecionado() == 1 ? carroServiceMySql : carroServiceMongo;
     }
 
     public DonoService getDonoService() {
-        return donoService;
+        return IndexFaces.obterBancoSelecionado() == 1 ? donoServiceMySql : donoServiceMongo;
     }
 }

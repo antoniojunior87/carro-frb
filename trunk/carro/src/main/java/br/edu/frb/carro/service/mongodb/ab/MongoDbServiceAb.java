@@ -14,6 +14,7 @@ public abstract class MongoDbServiceAb implements Serializable {
 
     private final Logger LOG = LoggerFactory.getLogger(MongoDbServiceAb.class);
     private MongoRepository mongoRepository;
+    private static String query;
 
     public MongoDbServiceAb() {
         super();
@@ -26,5 +27,15 @@ public abstract class MongoDbServiceAb implements Serializable {
 
     public MongoRepository getMongoRepository() {
         return mongoRepository;
+    }
+
+    protected void setQuery(String pQuery) {
+        query = pQuery;
+    }
+
+    public static String obterUltimaConsulta() {
+        String temp = query;
+        query = null;
+        return temp;
     }
 }

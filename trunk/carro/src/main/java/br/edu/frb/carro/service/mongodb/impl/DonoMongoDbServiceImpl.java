@@ -30,6 +30,9 @@ public class DonoMongoDbServiceImpl extends MongoDbServiceAb implements DonoServ
     public List<Dono> obterPorFiltro(final Dono dono) {
         DBObject dBObject = this.converter.toDbObject(dono);
         DBCursor dBCursor = this.donoDbCollection.find(dBObject);
+
+        setQuery("donoDbCollection.find(dono)");
+
         Dono donoTemp;
         List<Dono> donos = new ArrayList<Dono>();
 
@@ -45,6 +48,9 @@ public class DonoMongoDbServiceImpl extends MongoDbServiceAb implements DonoServ
         DBObject dBObject = new BasicDBObject();
         dBObject.put(Dono.CAMPO_CPF, cpf);
         dBObject = this.donoDbCollection.findOne(dBObject);
+
+        setQuery("donoDbCollection.findOne(cpf)");
+
         return this.converter.toObject(dBObject);
     }
 
@@ -53,6 +59,9 @@ public class DonoMongoDbServiceImpl extends MongoDbServiceAb implements DonoServ
         this.validar(dono);
         DBObject dBObject = this.converter.toDbObject(dono);
         WriteResult writeResult = this.donoDbCollection.save(dBObject);
+
+        setQuery("donoDbCollection.save(cpf)");
+
         if (writeResult.getError() != null) {
             // throw new RuntimeException("Erro ao inserir Item no MongoDB");
             return false;
@@ -65,13 +74,16 @@ public class DonoMongoDbServiceImpl extends MongoDbServiceAb implements DonoServ
         Dono dono = Dono.Builder.get().comCpf(cpf).criar();
         DBObject dBObject = this.converter.toDbObject(dono);
         WriteResult writeResult = this.donoDbCollection.remove(dBObject);
+
+        setQuery("donoDbCollection.remove(cpf)");
+
         if (writeResult.getError() != null) {
             // throw new RuntimeException("Erro ao excluir Item no MongoDB");
             return false;
         }
         return true;
     }
-    
+
     private void validar(final Dono dono) throws ListaException {
         ListaException listaException = new ListaException();
         if (dono == null) {

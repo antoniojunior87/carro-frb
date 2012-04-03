@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<html xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+        <title>#{bundle.title}</title>
+    </h:head>
+    <h:body>
+        <h:panelGrid id="tudo" width="100%">
+            <h:panelGrid id="topo" width="100%">
+                <p:menubar id="menuGlobal">
+                    <p:menuitem value="Inicio" url="/index.xhtml" />
+                    <p:menuitem value="#{bundle.title_listaCarros}" url="/listaCarro.xhtml" />
+                </p:menubar>
+            </h:panelGrid>
+
+            <h:panelGrid id="conteudo" width="100%">
+                <ui:insert name="conteudoPagina" />
+            </h:panelGrid>
+
+            <h:panelGrid id="rodape" width="100%">
+                <p:separator transient="true"/>
+                <h:outputLabel value="#{bundle.page_footer} #{indexFaces.banco}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </h:body>
+</html>

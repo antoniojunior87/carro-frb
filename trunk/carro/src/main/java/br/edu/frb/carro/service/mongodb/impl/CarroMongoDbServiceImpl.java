@@ -30,6 +30,9 @@ public class CarroMongoDbServiceImpl extends MongoDbServiceAb implements CarroSe
     public List<Carro> obterPorFiltro(Carro carro) {
         DBObject dBObject = this.converter.toDbObject(carro);
         DBCursor dBCursor = this.carroDbCollection.find(dBObject);
+
+        setQuery("carroDbCollection.find(carro)");
+
         Carro carroTemp;
         List<Carro> carros = new ArrayList<Carro>();
 
@@ -44,6 +47,9 @@ public class CarroMongoDbServiceImpl extends MongoDbServiceAb implements CarroSe
     public Carro obterPorChassi(Long chassi) {
         DBObject dBObject = new BasicDBObject();
         dBObject.put(Carro.CAMPO_CHASSI, chassi);
+
+        setQuery("carroDbCollection.findOne(chassi)");
+
         dBObject = this.carroDbCollection.findOne(dBObject);
         return this.converter.toObject(dBObject);
     }
@@ -52,6 +58,9 @@ public class CarroMongoDbServiceImpl extends MongoDbServiceAb implements CarroSe
     public boolean salvar(final Carro carro) {
         this.validar(carro);
         DBObject dBObject = this.converter.toDbObject(carro);
+
+        setQuery("carroDbCollection.save(carro)");
+
         WriteResult writeResult = this.carroDbCollection.save(dBObject);
         if (writeResult.getError() != null) {
             // throw new RuntimeException("Erro ao inserir Item no MongoDB");
@@ -64,6 +73,9 @@ public class CarroMongoDbServiceImpl extends MongoDbServiceAb implements CarroSe
     public boolean excluir(Long chassi) {
         Carro carro = Carro.Builder.get().comChassi(chassi).criar();
         DBObject dBObject = this.converter.toDbObject(carro);
+
+        setQuery("carroDbCollection.remove(chassi)");
+
         WriteResult writeResult = this.carroDbCollection.remove(dBObject);
         if (writeResult.getError() != null) {
             // throw new RuntimeException("Erro ao excluir Item no MongoDB");
