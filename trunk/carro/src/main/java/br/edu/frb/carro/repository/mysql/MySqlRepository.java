@@ -34,7 +34,7 @@ public class MySqlRepository implements Serializable {
         return resultSet;
     }
 
-    public boolean executeUpdate(final String query) {
+    public boolean executeUpdate(final String query) throws SQLException {
         sql = query;
         int retorno = 0;
         this.carregarDriver();
@@ -42,14 +42,9 @@ public class MySqlRepository implements Serializable {
             this.connection = DriverManager.getConnection(this.url, this.username, this.password);
             this.statement = this.connection.createStatement();
             retorno = this.statement.executeUpdate(query);
-            this.connection.commit();
         } catch (SQLException ex) {
             LOG.error("SQLException", ex);
-            try {
-                this.connection.rollback();
-            } catch (SQLException ex1) {
-                LOG.error("SQLException - rollback connection", ex);
-            }
+            throw ex;
         }
         return retorno > 0;
     }

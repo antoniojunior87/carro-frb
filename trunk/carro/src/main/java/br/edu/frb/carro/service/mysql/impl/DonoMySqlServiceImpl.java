@@ -1,12 +1,12 @@
 package br.edu.frb.carro.service.mysql.impl;
 
 import br.edu.frb.carro.entity.Dono;
-import br.edu.frb.carro.entity.Item;
 import br.edu.frb.carro.enums.Sexo;
 import br.edu.frb.carro.exception.ListaException;
 import br.edu.frb.carro.service.DonoService;
 import br.edu.frb.carro.service.mysql.ab.MySqlServiceAb;
 import br.edu.frb.carro.util.Util;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -102,17 +102,17 @@ public class DonoMySqlServiceImpl extends MySqlServiceAb implements DonoService 
 
     @Override
     public boolean salvar(final Dono dono) throws ListaException {
-        String query;
+        boolean retorno;
         this.validar(dono);
-        if (this.obterPorCpf(dono.getCpf()) != null) {
-            query = this.alterar(dono);
-        } else {
-            query = this.inserir(dono);
+        try {
+            retorno = this.inserir(dono);
+        } catch (Exception ex) {
+            retorno = this.alterar(dono);
         }
-        return super.getMySqlRepository().executeUpdate(query);
+        return retorno;
     }
 
-    private String inserir(final Dono dono) {
+    private boolean inserir(final Dono dono) throws Exception {
         StringBuilder query = new StringBuilder();
         query.append("  INSERT INTO carro.dono ( ");
         query.append("      dono_cpf, ");
@@ -129,10 +129,20 @@ public class DonoMySqlServiceImpl extends MySqlServiceAb implements DonoService 
         query.append(dono.getSexo());
         query.append("'");
         query.append(") ");
-        return query.toString();
+        try {
+            return super.getMySqlRepository().executeUpdate(query.toString());
+        } catch (SQLException ex) {
+            if (ex instanceof MySQLIntegrityConstraintViolationException) {
+                LOG.error("MySQLIntegrityConstraintViolationException", ex);
+                throw ex;
+            } else {
+                LOG.error("SQLException", ex);
+            }
+            return false;
+        }
     }
 
-    private String alterar(final Dono dono) {
+    private boolean alterar(final Dono dono) {
         StringBuilder query = new StringBuilder();
         query.append("  UPDATE carro.dono ");
         query.append("  SET ");
@@ -147,7 +157,12 @@ public class DonoMySqlServiceImpl extends MySqlServiceAb implements DonoService 
         query.append("  WHERE 1 = 1 ");
         query.append("  AND dono_cpf = ");
         query.append(dono.getCpf());
-        return query.toString();
+        try {
+            return super.getMySqlRepository().executeUpdate(query.toString());
+        } catch (SQLException ex) {
+            LOG.error("SQLException", ex);
+            return false;
+        }
     }
 
     @Override
@@ -160,10 +175,14 @@ public class DonoMySqlServiceImpl extends MySqlServiceAb implements DonoService 
             query.append("  AND dono_cpf = ");
             query.append(cpf);
         }
-
-        return super.getMySqlRepository().executeUpdate(query.toString());
+        try {
+            return super.getMySqlRepository().executeUpdate(query.toString());
+        } catch (SQLException ex) {
+            LOG.error("SQLException", ex);
+            return false;
+        }
     }
-    
+
     private void validar(final Dono dono) throws ListaException {
         ListaException listaException = new ListaException();
         if (dono == null) {

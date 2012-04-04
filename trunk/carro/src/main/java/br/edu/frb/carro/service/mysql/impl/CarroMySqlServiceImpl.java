@@ -1,11 +1,11 @@
 package br.edu.frb.carro.service.mysql.impl;
 
 import br.edu.frb.carro.entity.Carro;
-import br.edu.frb.carro.entity.Dono;
 import br.edu.frb.carro.exception.ListaException;
 import br.edu.frb.carro.service.CarroService;
 import br.edu.frb.carro.service.mysql.ab.MySqlServiceAb;
 import br.edu.frb.carro.util.Util;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -100,17 +100,17 @@ public class CarroMySqlServiceImpl extends MySqlServiceAb implements CarroServic
 
     @Override
     public boolean salvar(final Carro carro) throws ListaException {
-        String query;
+        boolean retorno;
         this.validar(carro);
-        if (this.obterPorChassi(carro.getChassi()) != null) {
-            query = this.alterar(carro);
-        } else {
-            query = this.inserir(carro);
+        try {
+            retorno = this.inserir(carro);
+        } catch (Exception ex) {
+            retorno = this.alterar(carro);
         }
-        return super.getMySqlRepository().executeUpdate(query);
+        return retorno;
     }
 
-    private String inserir(final Carro carro) {
+    private boolean inserir(final Carro carro) throws Exception {
         StringBuilder query = new StringBuilder();
         query.append("  INSERT INTO carro.carro ( ");
         query.append("      carr_chassi, ");
@@ -125,10 +125,20 @@ public class CarroMySqlServiceImpl extends MySqlServiceAb implements CarroServic
         query.append(", ");
         query.append(carro.getAno());
         query.append(") ");
-        return query.toString();
+        try {
+            return super.getMySqlRepository().executeUpdate(query.toString());
+        } catch (SQLException ex) {
+            if (ex instanceof MySQLIntegrityConstraintViolationException) {
+                LOG.error("MySQLIntegrityConstraintViolationException", ex);
+                throw ex;
+            } else {
+                LOG.error("SQLException", ex);
+            }
+            return false;
+        }
     }
 
-    private String alterar(final Carro carro) {
+    private boolean alterar(final Carro carro) {
         StringBuilder query = new StringBuilder();
         query.append("  UPDATE carro.carro ");
         query.append("  SET ");
@@ -141,7 +151,12 @@ public class CarroMySqlServiceImpl extends MySqlServiceAb implements CarroServic
         query.append("  WHERE 1 = 1 ");
         query.append("  AND carr_chassi = ");
         query.append(carro.getChassi());
-        return query.toString();
+        try {
+            return super.getMySqlRepository().executeUpdate(query.toString());
+        } catch (SQLException ex) {
+            LOG.error("SQLException", ex);
+            return false;
+        }
     }
 
     @Override
@@ -154,10 +169,14 @@ public class CarroMySqlServiceImpl extends MySqlServiceAb implements CarroServic
             query.append("  AND carr_chassi = ");
             query.append(chassi);
         }
-
-        return super.getMySqlRepository().executeUpdate(query.toString());
+        try {
+            return super.getMySqlRepository().executeUpdate(query.toString());
+        } catch (SQLException ex) {
+            LOG.error("SQLException", ex);
+            return false;
+        }
     }
-    
+
     private void validar(final Carro carro) throws ListaException {
         ListaException listaException = new ListaException();
         if (carro == null) {
