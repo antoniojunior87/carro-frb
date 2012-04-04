@@ -58,7 +58,7 @@ public class ItemMySqlServiceImpl extends MySqlServiceAb implements ItemService 
         } catch (SQLException ex) {
             LOG.error("SQLException", ex);
         } finally {
-            super.getMySqlRepository().close();
+            super.getMySqlRepository().closeStatement();
         }
 
         return itens;
@@ -77,6 +77,7 @@ public class ItemMySqlServiceImpl extends MySqlServiceAb implements ItemService 
         query.append("  WHERE 1 = 1 ");
         query.append("  AND item_id = ");
         query.append(id);
+        
         resultSet = super.getMySqlRepository().executeQuery(query.toString());
 
         try {
@@ -86,7 +87,7 @@ public class ItemMySqlServiceImpl extends MySqlServiceAb implements ItemService 
         } catch (SQLException ex) {
             LOG.error("SQLException", ex);
         } finally {
-            super.getMySqlRepository().close();
+            super.getMySqlRepository().closeStatement();
         }
         return itemTemp;
     }
