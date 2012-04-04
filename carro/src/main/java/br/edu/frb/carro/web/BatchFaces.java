@@ -6,6 +6,7 @@ import br.edu.frb.carro.service.mongodb.impl.CarroMongoDbServiceImpl;
 import br.edu.frb.carro.service.mysql.impl.CarroMySqlServiceImpl;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -23,8 +24,10 @@ public class BatchFaces {
     private Integer quantidade;
     private List<Carro> listaCarros = Collections.EMPTY_LIST;
     private int progresso;
+    private int progressoTotal;
     private CarroService carroServiceMySql = new CarroMySqlServiceImpl();
     private CarroService carroServiceMongo = new CarroMongoDbServiceImpl();
+    private long tempo;
 
     public void confirmar() {
         for (progresso = 0; progresso < listaCarros.size(); progresso++) {
@@ -35,6 +38,9 @@ public class BatchFaces {
     public void gerarDados() {
         listaCarros = new ArrayList<Carro>();
         quantidade = quantidade != null ? quantidade : QTD_PADRAO;
+        progressoTotal = quantidade;
+
+        long tempo1 = (new Date()).getTime();
         for (int i = 0; i < quantidade; i++) {
             Carro item = new Carro();
             item.setAno(1 + i);
@@ -42,18 +48,20 @@ public class BatchFaces {
             item.setModelo("Modelo " + i);
             listaCarros.add(item);
         }
+        long tempo2 = (new Date()).getTime();
+        tempo = tempo2 - tempo1;
     }
 
     public Integer getProgresso() {
         Integer p = 0;
-        if (quantidade != null & quantidade > 0 && progresso > 0) {
-            p = (progresso * 100) / quantidade;
+        if (progressoTotal > 0 && progresso > 0) {
+            p = (progresso * 100) / progressoTotal;
         }
         return p;
     }
 
     public void completou() {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Progresso Completado", "Progresso Completado"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Progresso Completado", "Progresso Completado - Tempo total (ms):" + tempo));
     }
 
     private CarroService getCarroService() {
