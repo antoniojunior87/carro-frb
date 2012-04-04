@@ -5,6 +5,7 @@ import br.edu.frb.carro.exception.ListaException;
 import br.edu.frb.carro.service.ItemService;
 import br.edu.frb.carro.service.mysql.ab.MySqlServiceAb;
 import br.edu.frb.carro.util.Util;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -92,17 +93,17 @@ public class ItemMySqlServiceImpl extends MySqlServiceAb implements ItemService 
 
     @Override
     public boolean salvar(final Item item) throws ListaException {
-        String query;
+        boolean retorno;
         this.validar(item);
-        if (this.obterPorId(item.getId()) != null) {
-            query = this.alterar(item);
-        } else {
-            query = this.inserir(item);
+        try {
+            retorno = this.inserir(item);
+        } catch (Exception ex) {
+            retorno = this.alterar(item);
         }
-        return super.getMySqlRepository().executeUpdate(query);
+        return retorno;
     }
 
-    private String inserir(final Item item) {
+    private boolean inserir(final Item item) throws Exception {
         StringBuilder query = new StringBuilder();
         query.append("  INSERT INTO carro.item ( ");
         query.append("      item_id, ");
@@ -114,10 +115,20 @@ public class ItemMySqlServiceImpl extends MySqlServiceAb implements ItemService 
         query.append(item.getNomeFormatado());
         query.append("'");
         query.append(") ");
-        return query.toString();
+        try {
+            return super.getMySqlRepository().executeUpdate(query.toString());
+        } catch (SQLException ex) {
+            if (ex instanceof MySQLIntegrityConstraintViolationException) {
+                LOG.error("MySQLIntegrityConstraintViolationException", ex);
+                throw ex;
+            } else {
+                LOG.error("SQLException", ex);
+            }
+            return false;
+        }
     }
 
-    private String alterar(final Item item) {
+    private boolean alterar(final Item item) {
         StringBuilder query = new StringBuilder();
         query.append("  UPDATE carro.item ");
         query.append("  SET ");
@@ -128,7 +139,12 @@ public class ItemMySqlServiceImpl extends MySqlServiceAb implements ItemService 
         query.append("  WHERE 1 = 1 ");
         query.append("  AND item_id = ");
         query.append(item.getId());
-        return query.toString();
+        try {
+            return super.getMySqlRepository().executeUpdate(query.toString());
+        } catch (SQLException ex) {
+            LOG.error("SQLException", ex);
+            return false;
+        }
     }
 
     @Override
@@ -141,10 +157,14 @@ public class ItemMySqlServiceImpl extends MySqlServiceAb implements ItemService 
             query.append("  AND item_id = ");
             query.append(id);
         }
-
-        return super.getMySqlRepository().executeUpdate(query.toString());
+        try {
+            return super.getMySqlRepository().executeUpdate(query.toString());
+        } catch (SQLException ex) {
+            LOG.error("SQLException", ex);
+            return false;
+        }
     }
-    
+
     private void validar(final Item item) throws ListaException {
         ListaException listaException = new ListaException();
         if (item == null) {
