@@ -62,7 +62,7 @@ public class ItemMongoDbServiceTest {
         Item item = this.itemMongoDbService.obterPorId(id);
         item.setNome(nome);
         this.itemMongoDbService.salvar(item);
-        assertEquals(nome, this.itemMongoDbService.obterPorId(id).getNome());
+        assertEquals(nome.toUpperCase(), this.itemMongoDbService.obterPorId(id).getNome());
     }
 
     @Test

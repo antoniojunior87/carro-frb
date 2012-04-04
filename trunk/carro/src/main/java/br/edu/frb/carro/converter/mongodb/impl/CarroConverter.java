@@ -28,8 +28,8 @@ public class CarroConverter implements Converter<Carro> {
                 dBObject.put(Carro.CAMPO_CHASSI, carro.getChassi());
                 dBObject.put(_ID, carro.getChassi().hashCode());
             }
-            if (!Util.isNullOrEmpty(carro.getModelo())) {
-                dBObject.put(Carro.CAMPO_MODELO, carro.getModelo());
+            if (carro.getModeloFormatado() != null) {
+                dBObject.put(Carro.CAMPO_MODELO, carro.getModeloFormatado());
             }
             if (carro.getAno() != null) {
                 dBObject.put(Carro.CAMPO_ANO, carro.getAno());
