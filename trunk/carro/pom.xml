@@ -83,7 +83,7 @@
         </dependency>
         <dependency>
             <groupId>org.primefaces.themes</groupId>
-            <artifactId>south-street</artifactId>
+            <artifactId>redmond</artifactId>
             <version>1.0.4</version>
         </dependency>
     </dependencies>

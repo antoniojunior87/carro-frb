@@ -6,7 +6,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/template.xhtml">
     <ui:define name="conteudoPagina">
-        <p:fieldset legend="#{bundle.ultimaOperacaoRealizada}" style="width: 80%;">
+        <p:fieldset legend="#{bundle.label_batch}" style="width: 80%;">
             <h:form id="form" >
                 <h:panelGrid columns="2">
                     <h:outputLabel value="#{bundle.label_batch_quantidade}"/>
@@ -14,10 +14,11 @@
                 </h:panelGrid>
                 <h:panelGroup>
                     <p:commandButton action="#{batchFaces.gerarDados()}" value="#{bundle.botao_gerarDados}" update="panelTabela"/>
-                    <p:commandButton action="#{batchFaces.confirmar()}" value="#{bundle.botao_confirmar}"/>
+                    <p:commandButton action="#{batchFaces.confirmar()}" value="#{bundle.botao_confirmar}" onclick="pbAjax.start();"/>
                 </h:panelGroup>
                 <h:panelGrid id="panelTabela" width="100%" >
-                    <p:dataTable id="tabela" var="carro" value="#{batchFaces.listaCarros}"  paginator="true" rows="20" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    <p:dataTable id="tabela" var="carro" value="#{batchFaces.listaCarros}"  paginator="true" rows="10"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  rowsPerPageTemplate="5,10,15">
                         <p:column sortBy="#{carro.modelo}">
                             <f:facet name="header">
@@ -43,8 +44,8 @@
         </p:fieldset>
         <h:panelGrid id="query" width="100%">
             <p:fieldset legend="#{bundle.progresso}" style="width: 80%;">
-                <p:progressBar  interval="1" widgetVar="pbAjax" ajax="true" value="#{batchFaces.progresso}" labelTemplate="{value}%" styleClass="animated">
-                    <p:ajax event="complete" listener="#{batchFaces.completou}" update="growl"/>
+                <p:progressBar  interval="1" widgetVar="pbAjax" ajax="true" value="#{batchFaces.progresso}" labelTemplate="{value}%"    >
+                    <p:ajax event="complete" oncomplete="pbAjax.stop();" listener="#{batchFaces.completou}" update="growl"/>
                 </p:progressBar>
             </p:fieldset>
         </h:panelGrid>
