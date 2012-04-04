@@ -44,7 +44,7 @@
         </p:fieldset>
         <h:panelGrid id="query" width="100%">
             <p:fieldset legend="#{bundle.progresso}" style="width: 80%;">
-                <p:progressBar  interval="1" widgetVar="pbAjax" ajax="true" value="#{batchFaces.progresso}" labelTemplate="{value}%"    >
+                <p:progressBar interval="1000" widgetVar="pbAjax" ajax="true" value="#{batchFaces.progresso}" labelTemplate="{value}%">
                     <p:ajax event="complete" oncomplete="pbAjax.stop();" listener="#{batchFaces.completou}" update="growl"/>
                 </p:progressBar>
             </p:fieldset>

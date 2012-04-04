@@ -30,17 +30,18 @@ public class BatchFaces {
     private long tempo;
 
     public void confirmar() {
+        long tempo1 = (new Date()).getTime();
         for (progresso = 0; progresso < listaCarros.size(); progresso++) {
             getCarroService().salvar(listaCarros.get(progresso));
         }
+        long tempo2 = (new Date()).getTime();
+        tempo = tempo2 - tempo1;
     }
 
     public void gerarDados() {
         listaCarros = new ArrayList<Carro>();
         quantidade = quantidade != null ? quantidade : QTD_PADRAO;
         progressoTotal = quantidade;
-
-        long tempo1 = (new Date()).getTime();
         for (int i = 0; i < quantidade; i++) {
             Carro item = new Carro();
             item.setAno(1 + i);
@@ -48,8 +49,6 @@ public class BatchFaces {
             item.setModelo("Modelo " + i);
             listaCarros.add(item);
         }
-        long tempo2 = (new Date()).getTime();
-        tempo = tempo2 - tempo1;
     }
 
     public Integer getProgresso() {
@@ -61,7 +60,7 @@ public class BatchFaces {
     }
 
     public void completou() {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Progresso Completado", "Progresso Completado - Tempo total (ms):" + tempo));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Progresso Completado - Tempo total (ms):" + tempo, ""));
     }
 
     private CarroService getCarroService() {
