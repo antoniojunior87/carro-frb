@@ -24,8 +24,8 @@ public class ItemConverter implements Converter<Item> {
                 dBObject.put(Item.CAMPO_ID, item.getId());
                 dBObject.put(_ID, item.getId().hashCode());
             }
-            if (!Util.isNullOrEmpty(item.getNome())) {
-                dBObject.put(Item.CAMPO_NOME, item.getNome());
+            if (item.getNomeFormatado() != null) {
+                dBObject.put(Item.CAMPO_NOME, item.getNomeFormatado());
             }
         }
         return dBObject;
