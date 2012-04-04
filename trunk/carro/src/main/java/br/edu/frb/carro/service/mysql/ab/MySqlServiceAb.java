@@ -1,6 +1,7 @@
 package br.edu.frb.carro.service.mysql.ab;
 
 import br.edu.frb.carro.repository.mysql.MySqlRepository;
+import br.edu.frb.carro.util.Util;
 import java.io.Serializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,5 +22,13 @@ public abstract class MySqlServiceAb implements Serializable {
 
     protected MySqlRepository getMySqlRepository() {
         return mySqlRepository;
+    }
+
+    protected String getCampo(Object obj) {
+        String retorno = null;
+        if (!Util.isNullOrEmpty(obj)) {
+            retorno = "'" + obj + "'";
+        }
+        return retorno;
     }
 }

@@ -1,8 +1,6 @@
 package br.edu.frb.carro.service;
 
 import br.edu.frb.carro.entity.Carro;
-import br.edu.frb.carro.entity.Dono;
-import br.edu.frb.carro.enums.Sexo;
 import br.edu.frb.carro.exception.ListaException;
 import br.edu.frb.carro.service.mysql.impl.CarroMySqlServiceImpl;
 import java.util.List;
