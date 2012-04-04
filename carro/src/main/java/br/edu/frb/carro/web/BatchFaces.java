@@ -30,9 +30,10 @@ public class BatchFaces {
     private long tempo;
 
     public void confirmar() {
+        CarroService carroService = getCarroService();
         long tempo1 = (new Date()).getTime();
         for (progresso = 0; progresso < listaCarros.size(); progresso++) {
-            getCarroService().salvar(listaCarros.get(progresso));
+            carroService.salvar(listaCarros.get(progresso));
         }
         long tempo2 = (new Date()).getTime();
         tempo = tempo2 - tempo1;

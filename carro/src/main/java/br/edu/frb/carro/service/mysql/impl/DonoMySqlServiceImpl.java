@@ -66,7 +66,7 @@ public class DonoMySqlServiceImpl extends MySqlServiceAb implements DonoService 
         } catch (SQLException ex) {
             LOG.error("SQLException", ex);
         } finally {
-            super.getMySqlRepository().close();
+            super.getMySqlRepository().closeStatement();
         }
 
         return donos;
@@ -95,7 +95,7 @@ public class DonoMySqlServiceImpl extends MySqlServiceAb implements DonoService 
         } catch (SQLException ex) {
             LOG.error("SQLException", ex);
         } finally {
-            super.getMySqlRepository().close();
+            super.getMySqlRepository().closeStatement();
         }
         return donoTemp;
     }

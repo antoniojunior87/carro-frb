@@ -1,5 +1,6 @@
 package br.edu.frb.carro.web;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -11,7 +12,7 @@ import javax.faces.model.SelectItem;
  */
 @SessionScoped
 @ManagedBean(name = "indexFaces")
-public class IndexFaces {
+public class IndexFaces implements Serializable {
 
     public static final String PARAMETRO_BANCO_SELECIONADO = "br.edu.frb.carro.web.BANCO_SELECIONADO";
 

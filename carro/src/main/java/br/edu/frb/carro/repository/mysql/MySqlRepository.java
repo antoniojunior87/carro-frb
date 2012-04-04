@@ -16,17 +16,27 @@ public class MySqlRepository implements Serializable {
     private final String username = "root";
     private final String password = "";
     private final String driverName = "com.mysql.jdbc.Driver";
-    private Connection connection;
+    private static Connection connection;
     private Statement statement;
     private static String sql;
+    
+    private Connection getConnection() {
+        try {
+            if (connection == null) {
+                connection = DriverManager.getConnection(this.url, this.username, this.password);
+            }
+        } catch (SQLException ex) {
+            LOG.error("SQLException", ex);
+        }
+        return connection;
+    }
 
     public ResultSet executeQuery(final String query) {
         sql = query;
         ResultSet resultSet = null;
         this.carregarDriver();
         try {
-            this.connection = DriverManager.getConnection(this.url, this.username, this.password);
-            this.statement = this.connection.createStatement();
+            this.statement = this.getConnection().createStatement();
             resultSet = this.statement.executeQuery(query);
         } catch (SQLException ex) {
             LOG.error("SQLException", ex);
@@ -39,9 +49,9 @@ public class MySqlRepository implements Serializable {
         int retorno = 0;
         this.carregarDriver();
         try {
-            this.connection = DriverManager.getConnection(this.url, this.username, this.password);
-            this.statement = this.connection.createStatement();
+            this.statement = this.getConnection().createStatement();
             retorno = this.statement.executeUpdate(query);
+            this.closeStatement();
         } catch (SQLException ex) {
             LOG.error("SQLException", ex);
             throw ex;
@@ -49,20 +59,20 @@ public class MySqlRepository implements Serializable {
         return retorno > 0;
     }
 
+    public void closeConnection() {
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            LOG.error("SQLException - close connection", ex);
+        }
 
+    }
 
-    public void close() {
+    public void closeStatement() {
         try {
             this.statement.close();
         } catch (SQLException ex) {
             LOG.error("SQLException - close statement", ex);
-        } finally {
-            try {
-                this.connection.close();
-            } catch (SQLException ex) {
-                LOG.error("SQLException - close connection", ex);
-            }
-
         }
     }
 

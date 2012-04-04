@@ -7,6 +7,7 @@ import br.edu.frb.carro.repository.mysql.MySqlRepository;
 import br.edu.frb.carro.service.DonoService;
 import br.edu.frb.carro.service.mongodb.impl.DonoMongoDbServiceImpl;
 import br.edu.frb.carro.service.mysql.impl.DonoMySqlServiceImpl;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +22,7 @@ import javax.faces.context.FacesContext;
  */
 @ViewScoped
 @ManagedBean(name = "donoFaces")
-public class DonoFaces {
+public class DonoFaces implements Serializable {
 
     private DonoService donoServiceMySql = new DonoMySqlServiceImpl();
     private DonoService donoServiceMongoDb = new DonoMongoDbServiceImpl();

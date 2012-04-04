@@ -6,6 +6,7 @@ import br.edu.frb.carro.repository.mysql.MySqlRepository;
 import br.edu.frb.carro.service.ItemService;
 import br.edu.frb.carro.service.mongodb.impl.ItemMongoDbServiceImpl;
 import br.edu.frb.carro.service.mysql.impl.ItemMySqlServiceImpl;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -20,7 +21,7 @@ import javax.faces.context.FacesContext;
  */
 @ViewScoped
 @ManagedBean(name = "itemFaces")
-public class ItemFaces {
+public class ItemFaces implements Serializable {
 
     private ItemService itemServiceMySql = new ItemMySqlServiceImpl();
     private ItemService itemServiceMongoDb = new ItemMongoDbServiceImpl();

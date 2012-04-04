@@ -64,7 +64,7 @@ public class CarroMySqlServiceImpl extends MySqlServiceAb implements CarroServic
         } catch (SQLException ex) {
             LOG.error("SQLException", ex);
         } finally {
-            super.getMySqlRepository().close();
+            super.getMySqlRepository().closeStatement();
         }
 
         return carros;
@@ -93,7 +93,7 @@ public class CarroMySqlServiceImpl extends MySqlServiceAb implements CarroServic
         } catch (SQLException ex) {
             LOG.error("SQLException", ex);
         } finally {
-            super.getMySqlRepository().close();
+            super.getMySqlRepository().closeStatement();
         }
         return carroTemp;
     }
