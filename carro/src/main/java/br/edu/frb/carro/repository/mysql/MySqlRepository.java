@@ -19,7 +19,7 @@ public class MySqlRepository implements Serializable {
     private static Connection connection;
     private Statement statement;
     private static String sql;
-    
+
     private Connection getConnection() {
         try {
             if (connection == null) {
@@ -46,26 +46,20 @@ public class MySqlRepository implements Serializable {
 
     public boolean executeUpdate(final String query) throws SQLException {
         sql = query;
-        int retorno = 0;
+        int retorno;
         this.carregarDriver();
-        try {
-            this.statement = this.getConnection().createStatement();
-            retorno = this.statement.executeUpdate(query);
-            this.closeStatement();
-        } catch (SQLException ex) {
-            LOG.error("SQLException", ex);
-            throw ex;
-        }
+        this.statement = this.getConnection().createStatement();
+        retorno = this.statement.executeUpdate(query);
+        this.statement.close();
         return retorno > 0;
     }
 
-    public void closeConnection() {
+    public void closeConnection() throws SQLException {
         try {
             connection.close();
         } catch (SQLException ex) {
             LOG.error("SQLException - close connection", ex);
         }
-
     }
 
     public void closeStatement() {
