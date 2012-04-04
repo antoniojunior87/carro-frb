@@ -7,6 +7,7 @@ import br.edu.frb.carro.repository.mysql.MySqlRepository;
 import br.edu.frb.carro.service.DonoService;
 import br.edu.frb.carro.service.mongodb.impl.DonoMongoDbServiceImpl;
 import br.edu.frb.carro.service.mysql.impl.DonoMySqlServiceImpl;
+import br.edu.frb.carro.util.Util;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
@@ -86,7 +87,7 @@ public class DonoFaces implements Serializable {
     }
 
     public List<Dono> getDonos() {
-        if (this.donos == null) {
+        if (Util.isNullOrEmpty(this.donos)) {
             this.donos = getDonoService().obterPorFiltro(null);
         }
         return this.donos;

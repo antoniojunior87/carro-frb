@@ -13,4 +13,9 @@
         </resource-bundle>
         <message-bundle>messages</message-bundle>
     </application>
+    <converter>
+        <display-name>DonoConverter</display-name>
+        <converter-id>DonoConverter</converter-id>
+        <converter-class>br.edu.frb.carro.web.converter.DonoConverter</converter-class>
+    </converter>
 </faces-config>

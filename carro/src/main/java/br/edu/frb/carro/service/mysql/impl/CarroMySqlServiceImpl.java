@@ -1,6 +1,8 @@
 package br.edu.frb.carro.service.mysql.impl;
 
 import br.edu.frb.carro.entity.Carro;
+import br.edu.frb.carro.entity.Dono;
+import br.edu.frb.carro.enums.Sexo;
 import br.edu.frb.carro.exception.ListaException;
 import br.edu.frb.carro.service.CarroService;
 import br.edu.frb.carro.service.mysql.ab.MySqlServiceAb;
@@ -25,14 +27,22 @@ public class CarroMySqlServiceImpl extends MySqlServiceAb implements CarroServic
     public List<Carro> obterPorFiltro(Carro carro) {
         List<Carro> carros = new ArrayList<Carro>();
         Carro carroTemp;
+        Dono donoTemp;
         ResultSet resultSet;
         StringBuilder query = new StringBuilder();
         query.append("  SELECT ");
-        query.append("      carr_chassi, ");
-        query.append("      carr_modelo, ");
-        query.append("      carr_ano ");
+        query.append("      carr.carr_chassi, ");
+        query.append("      carr.carr_modelo, ");
+        query.append("      carr.carr_ano, ");
+        query.append("      dono.dono_cpf, ");
+        query.append("      dono.dono_nome, ");
+        query.append("      dono.dono_sexo ");
         query.append("  FROM ");
-        query.append("      carro.carro ");
+        query.append("      carro.carro carr ");
+        query.append("  LEFT JOIN ");
+        query.append("      carro.dono dono ");
+        query.append("  ON  ");
+        query.append("      dono.dono_cpf = carr.dono_cpf ");
         query.append("  WHERE 1 = 1 ");
         if (carro != null) {
             if (carro.getChassi() != null) {
@@ -58,7 +68,8 @@ public class CarroMySqlServiceImpl extends MySqlServiceAb implements CarroServic
 
         try {
             while (resultSet.next()) {
-                carroTemp = Carro.Builder.get().comChassi(resultSet.getLong("carr_chassi")).comModelo(resultSet.getString("carr_modelo")).comAno(resultSet.getInt("carr_ano")).criar();
+                donoTemp = Dono.Builder.get().comCpf(resultSet.getLong("dono_cpf")).comNome(resultSet.getString("dono_nome")).com(Sexo.from("dono_sexo")).criar();
+                carroTemp = Carro.Builder.get().comChassi(resultSet.getLong("carr_chassi")).comModelo(resultSet.getString("carr_modelo")).comAno(resultSet.getInt("carr_ano")).com(donoTemp).criar();
                 carros.add(carroTemp);
             }
         } catch (SQLException ex) {
@@ -73,14 +84,22 @@ public class CarroMySqlServiceImpl extends MySqlServiceAb implements CarroServic
     @Override
     public Carro obterPorChassi(Long chassi) {
         Carro carroTemp = null;
+        Dono donoTemp;
         ResultSet resultSet;
         StringBuilder query = new StringBuilder();
         query.append("  SELECT ");
-        query.append("      carr_chassi, ");
-        query.append("      carr_modelo, ");
-        query.append("      carr_ano ");
+        query.append("      carr.carr_chassi, ");
+        query.append("      carr.carr_modelo, ");
+        query.append("      carr.carr_ano, ");
+        query.append("      dono.dono_cpf, ");
+        query.append("      dono.dono_nome, ");
+        query.append("      dono.dono_sexo ");
         query.append("  FROM ");
-        query.append("      carro.carro ");
+        query.append("      carro.carro carr ");
+        query.append("  LEFT JOIN ");
+        query.append("      carro.dono dono ");
+        query.append("  ON  ");
+        query.append("      dono.dono_cpf = carr.dono_cpf ");
         query.append("  WHERE 1 = 1 ");
         query.append("  AND carr_chassi = ");
         query.append(chassi);
@@ -88,7 +107,8 @@ public class CarroMySqlServiceImpl extends MySqlServiceAb implements CarroServic
 
         try {
             while (resultSet.next()) {
-                carroTemp = Carro.Builder.get().comChassi(resultSet.getLong("carr_chassi")).comModelo(resultSet.getString("carr_modelo")).comAno(resultSet.getInt("carr_ano")).criar();
+                donoTemp = Dono.Builder.get().comCpf((Long) resultSet.getObject("dono_cpf")).comNome(resultSet.getString("dono_nome")).com(Sexo.from("dono_sexo")).criar();
+                carroTemp = Carro.Builder.get().comChassi(resultSet.getLong("carr_chassi")).comModelo(resultSet.getString("carr_modelo")).comAno(resultSet.getInt("carr_ano")).com(donoTemp).criar();
             }
         } catch (SQLException ex) {
             LOG.error("SQLException", ex);
@@ -115,13 +135,16 @@ public class CarroMySqlServiceImpl extends MySqlServiceAb implements CarroServic
         query.append("  INSERT INTO carro.carro ( ");
         query.append("      carr_chassi, ");
         query.append("      carr_modelo, ");
-        query.append("      carr_ano ");
+        query.append("      carr_ano, ");
+        query.append("      dono_cpf ");
         query.append("  ) VALUES (");
         query.append(carro.getChassi());
         query.append(", ");
         query.append(this.getCampo(carro.getModeloFormatado()));
         query.append(", ");
         query.append(this.getCampo(carro.getAno()));
+        query.append(", ");
+        query.append(this.getCampo(carro.getDono() != null && carro.getDono().getCpf()!= null ? carro.getDono().getCpf() : null));
         query.append(") ");
         try {
             return super.getMySqlRepository().executeUpdate(query.toString());
@@ -145,6 +168,9 @@ public class CarroMySqlServiceImpl extends MySqlServiceAb implements CarroServic
         query.append(", ");
         query.append("      carr_ano = ");
         query.append(this.getCampo(carro.getAno()));
+        query.append(", ");
+        query.append("      dono_cpf = ");
+        query.append(this.getCampo(carro.getDono() != null ? carro.getDono().getCpf() : null));
         query.append("  WHERE 1 = 1 ");
         query.append("  AND carr_chassi = ");
         query.append(carro.getChassi());

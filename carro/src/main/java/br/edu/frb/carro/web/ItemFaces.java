@@ -6,6 +6,7 @@ import br.edu.frb.carro.repository.mysql.MySqlRepository;
 import br.edu.frb.carro.service.ItemService;
 import br.edu.frb.carro.service.mongodb.impl.ItemMongoDbServiceImpl;
 import br.edu.frb.carro.service.mysql.impl.ItemMySqlServiceImpl;
+import br.edu.frb.carro.util.Util;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
@@ -85,7 +86,7 @@ public class ItemFaces implements Serializable {
     }
 
     public List<Item> getItens() {
-        if (this.itens == null) {
+        if (Util.isNullOrEmpty(this.itens)) {
             this.itens = this.getItemService().obterPorFiltro(null);
         }
         return this.itens;
