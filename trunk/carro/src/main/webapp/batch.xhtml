@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template.xhtml">
+    <ui:define name="conteudoPagina">
+        <p:fieldset legend="#{bundle.ultimaOperacaoRealizada}" style="width: 80%;">
+            <h:form id="form" >
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.label_batch_quantidade}"/>
+                    <p:inputText value="#{batchFaces.quantidade}"/>
+                </h:panelGrid>
+                <h:panelGroup>
+                    <p:commandButton action="#{batchFaces.gerarDados()}" value="#{bundle.botao_gerarDados}" update="panelTabela"/>
+                    <p:commandButton action="#{batchFaces.confirmar()}" value="#{bundle.botao_confirmar}"/>
+                </h:panelGroup>
+                <h:panelGrid id="panelTabela" width="100%" >
+                    <p:dataTable id="tabela" var="carro" value="#{batchFaces.listaCarros}"  paginator="true" rows="20" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+                        <p:column sortBy="#{carro.modelo}">
+                            <f:facet name="header">
+                                #{bundle.label_carro_modelo}
+                            </f:facet>
+                            <h:outputText value="#{carro.modelo}" />
+                        </p:column>
+                        <p:column sortBy="#{carro.ano}">
+                            <f:facet name="header">
+                                #{bundle.label_carro_ano}
+                            </f:facet>
+                            <h:outputText value="#{carro.ano}" />
+                        </p:column>
+                        <p:column sortBy="#{carro.chassi}">
+                            <f:facet name="header">
+                                #{bundle.label_carro_chassi}
+                            </f:facet>
+                            <h:outputText value="#{carro.chassi}" />
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
+            </h:form>
+        </p:fieldset>
+        <h:panelGrid id="query" width="100%">
+            <p:fieldset legend="#{bundle.progresso}" style="width: 80%;">
+                <p:progressBar  interval="1" widgetVar="pbAjax" ajax="true" value="#{batchFaces.progresso}" labelTemplate="{value}%" styleClass="animated">
+                    <p:ajax event="complete" listener="#{batchFaces.completou}" update="growl"/>
+                </p:progressBar>
+            </p:fieldset>
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>

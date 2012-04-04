@@ -9,11 +9,14 @@
         <title>#{bundle.title}</title>
     </h:head>
     <h:body>
+        <p:growl autoUpdate="true" id="growl"/>
+
         <h:panelGrid id="tudo" width="100%">
             <h:panelGrid id="topo" width="100%">
                 <p:menubar id="menuGlobal">
                     <p:menuitem value="Inicio" url="/index.xhtml" />
                     <p:menuitem value="#{bundle.title_listaCarros}" url="/listaCarro.xhtml" />
+                    <p:menuitem value="#{bundle.title_batch}" url="/batch.xhtml" />
                 </p:menubar>
             </h:panelGrid>
 

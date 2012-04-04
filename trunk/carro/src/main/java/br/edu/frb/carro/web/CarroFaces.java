@@ -120,11 +120,11 @@ public class CarroFaces {
         }
     }
 
-    public CarroService getCarroService() {
+    private CarroService getCarroService() {
         return IndexFaces.obterBancoSelecionado() == 1 ? carroServiceMySql : carroServiceMongo;
     }
 
-    public DonoService getDonoService() {
+    private DonoService getDonoService() {
         return IndexFaces.obterBancoSelecionado() == 1 ? donoServiceMySql : donoServiceMongo;
     }
 }
