@@ -119,11 +119,9 @@ public class CarroMySqlServiceImpl extends MySqlServiceAb implements CarroServic
         query.append("  ) VALUES (");
         query.append(carro.getChassi());
         query.append(", ");
-        query.append("'");
-        query.append(carro.getModeloFormatado());
-        query.append("'");
+        query.append(this.getCampo(carro.getModeloFormatado()));
         query.append(", ");
-        query.append(carro.getAno());
+        query.append(this.getCampo(carro.getAno()));
         query.append(") ");
         try {
             return super.getMySqlRepository().executeUpdate(query.toString());
@@ -143,11 +141,10 @@ public class CarroMySqlServiceImpl extends MySqlServiceAb implements CarroServic
         query.append("  UPDATE carro.carro ");
         query.append("  SET ");
         query.append("      carr_modelo = ");
-        query.append("'");
-        query.append(carro.getModeloFormatado());
-        query.append("', ");
+        query.append(this.getCampo(carro.getModeloFormatado()));
+        query.append(", ");
         query.append("      carr_ano = ");
-        query.append(carro.getAno());
+        query.append(this.getCampo(carro.getAno()));
         query.append("  WHERE 1 = 1 ");
         query.append("  AND carr_chassi = ");
         query.append(carro.getChassi());

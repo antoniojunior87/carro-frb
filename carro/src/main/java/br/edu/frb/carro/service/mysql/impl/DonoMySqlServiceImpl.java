@@ -121,13 +121,9 @@ public class DonoMySqlServiceImpl extends MySqlServiceAb implements DonoService 
         query.append("  ) VALUES (");
         query.append(dono.getCpf());
         query.append(", ");
-        query.append("'");
-        query.append(dono.getNomeFormatado());
-        query.append("'");
+        query.append(this.getCampo(dono.getNomeFormatado()));
         query.append(", ");
-        query.append("'");
-        query.append(dono.getSexo());
-        query.append("'");
+        query.append(this.getCampo(dono.getSexo()));
         query.append(") ");
         try {
             return super.getMySqlRepository().executeUpdate(query.toString());
@@ -147,13 +143,10 @@ public class DonoMySqlServiceImpl extends MySqlServiceAb implements DonoService 
         query.append("  UPDATE carro.dono ");
         query.append("  SET ");
         query.append("      dono_nome = ");
-        query.append("'");
-        query.append(dono.getNomeFormatado());
-        query.append("', ");
+        query.append(this.getCampo(dono.getNomeFormatado()));
+        query.append(", ");
         query.append("      dono_sexo = ");
-        query.append("'");
-        query.append(dono.getSexo());
-        query.append("'");
+        query.append(this.getCampo(dono.getSexo()));
         query.append("  WHERE 1 = 1 ");
         query.append("  AND dono_cpf = ");
         query.append(dono.getCpf());

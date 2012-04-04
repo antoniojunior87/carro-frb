@@ -111,9 +111,7 @@ public class ItemMySqlServiceImpl extends MySqlServiceAb implements ItemService 
         query.append("  ) VALUES (");
         query.append(item.getId());
         query.append(", ");
-        query.append("'");
-        query.append(item.getNomeFormatado());
-        query.append("'");
+        query.append(this.getCampo(item.getNomeFormatado()));
         query.append(") ");
         try {
             return super.getMySqlRepository().executeUpdate(query.toString());
@@ -133,9 +131,7 @@ public class ItemMySqlServiceImpl extends MySqlServiceAb implements ItemService 
         query.append("  UPDATE carro.item ");
         query.append("  SET ");
         query.append("      item_nome = ");
-        query.append("'");
-        query.append(item.getNomeFormatado());
-        query.append("'");
+        query.append(this.getCampo(item.getNomeFormatado()));
         query.append("  WHERE 1 = 1 ");
         query.append("  AND item_id = ");
         query.append(item.getId());
