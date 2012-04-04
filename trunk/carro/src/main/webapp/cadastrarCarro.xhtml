@@ -15,7 +15,7 @@
                 <h:outputLabel value="*#{bundle.label_carro_chassi}"/>
                 <p:inputText value="#{carroFaces.carro.chassi}"/>
                 <h:outputLabel value="#{bundle.label_carro_dono}"/>
-                <p:selectOneMenu value="#{carroFaces.carro.dono}">
+                <p:selectOneMenu value="#{carroFaces.carro.dono}" converter="DonoConverter">
                     <f:selectItem itemValue="" itemLabel=""/>
                     <f:selectItems value="#{carroFaces.listaDono}" var="dono" itemLabel="#{dono.nome}" itemValue="#{dono}"/>
                 </p:selectOneMenu>

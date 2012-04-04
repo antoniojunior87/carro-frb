@@ -10,6 +10,7 @@ import br.edu.frb.carro.service.mongodb.impl.CarroMongoDbServiceImpl;
 import br.edu.frb.carro.service.mongodb.impl.DonoMongoDbServiceImpl;
 import br.edu.frb.carro.service.mysql.impl.CarroMySqlServiceImpl;
 import br.edu.frb.carro.service.mysql.impl.DonoMySqlServiceImpl;
+import br.edu.frb.carro.util.Util;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
@@ -99,7 +100,7 @@ public class CarroFaces implements Serializable {
     }
 
     public List<Dono> getListaDono() {
-        if (listaDono == null) {
+        if (Util.isNullOrEmpty(this.listaDono)) {
             listaDono = getDonoService().obterPorFiltro(null);
         }
         return listaDono;
