@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template.xhtml">
+    <ui:define name="conteudoPagina">
+        <h:form id="form" >
+            <h:panelGrid columns="2">
+                <h:outputLabel value="#{bundle.label_item_nome}"/>
+                <p:inputText value="#{itemFaces.filtro.nome}"/>
+            </h:panelGrid>
+            <h:panelGroup>
+                <p:commandButton action="#{itemFaces.pesquisar}" value="#{bundle.botao_pesquisar}" update="panelTabela,:query"/>
+                <p:commandButton action="#{itemFaces.limpar}" value="#{bundle.botao_limpar}" update="@form,:query"/>
+            </h:panelGroup>
+
+            <h:panelGrid id="panelTabela" width="100%">
+                <p:dataTable id="tabela" var="item" value="#{itemFaces.itens}" paginator="true" rows="20" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15">
+                    <p:column sortBy="#{item.id}">
+                        <f:facet name="header">
+                            #{bundle.label_item_id}
+                        </f:facet>
+                        <h:outputText value="#{item.id}" />
+                    </p:column>
+                    <p:column sortBy="#{item.nomeFormatado}">
+                        <f:facet name="header">
+                            #{bundle.label_item_nome}
+                        </f:facet>
+                        <h:outputText value="#{item.nomeFormatado}" />
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            #{bundle.acoes}
+                        </f:facet>
+                        <p:commandLink value="#{bundle.botao_excluir}" actionListener="#{itemFaces.excluir(item)}" update=":form:panelTabela :query"/>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+            <h:panelGroup>
+                <p:commandButton action="cadastrarItem.xhtml" value="#{bundle.botao_novo}" ajax="false"/>
+            </h:panelGroup>
+        </h:form>
+        <h:panelGrid id="query" width="100%">
+            <p:fieldset legend="#{bundle.ultimaOperacaoRealizada}" style="width: 80%;">
+                <p:inputTextarea value="#{itemFaces.query}" readonly="true" style="width: 100%"/>
+            </p:fieldset>
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>
