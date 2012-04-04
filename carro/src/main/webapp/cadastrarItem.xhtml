@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template.xhtml">
+    <ui:define name="conteudoPagina">
+        <h:form id="form">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="*#{bundle.label_item_id}"/>
+                <p:inputText value="#{itemFaces.item.id}"/>
+                <h:outputLabel value="#{bundle.label_item_nome}"/>
+                <p:inputText value="#{itemFaces.item.nome}"/>
+            </h:panelGrid>
+            <h:panelGroup>
+                <p:commandButton action="#{itemFaces.salvar}" value="#{bundle.botao_salvar}" ajax="false"/>
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
+</ui:composition>
