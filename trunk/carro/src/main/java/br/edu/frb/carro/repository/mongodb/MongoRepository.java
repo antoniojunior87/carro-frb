@@ -3,13 +3,14 @@ package br.edu.frb.carro.repository.mongodb;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
+import java.io.Serializable;
 import java.net.UnknownHostException;
 
 /**
  *
  * @author joelamalio
  */
-public class MongoRepository {
+public class MongoRepository implements Serializable {
 
     private static final String DB_NAME = "carroDb";
     private static final String DB_TABLE_ITEM = "itemTable";
