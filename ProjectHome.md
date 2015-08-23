@@ -1,0 +1,1 @@
+Projeto Carro com MySQL e MongoDB. Que será usado como base para comparação entre os tipos de bancos de dados (Relacional x NOSQL).
